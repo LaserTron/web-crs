@@ -1,0 +1,65 @@
+$def with (Qspecs)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>$Qspecs[0]</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrab, mathjax, jquery etc.   -->
+    <!--          BEGIN                     -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax:
+    {inlineMath: [['$$','$$'],
+    ['$$$$','$$$$'],['\[','\]']]}}); </script><!-- dollar signs doubled because of Templetor-->
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- Bootstrab, mathjax, jquery etc.   -->
+    <!--          END                      -->   
+
+    <!-- custom scripts -->
+    <script type="text/javascript">var state="initial"; </script>
+    <script src="/static/control.js"></script>
+    <script src="/static/question.js"></script>
+    <script type="text/javascript">syncState();</script>
+  </head>
+
+  <body>
+
+    <!-- Problem statement -->
+    
+     <div class="container">
+       <div class="row">
+	 <h2>$Qspecs[0]</h2>
+	<div class="col-xs-12">
+	  $Qspecs[1]
+	</div>
+      </div>
+     </div>
+
+     <!-- Answer choices-->
+     <div class="container">
+       <div class="row">
+	 <form>
+	   $for ans in Qspecs[2]:
+	        <div class="col-xs-12" name="$ans[1]"><input type="checkbox" name="ansChoice" value="$ans[1]">$ans[0]</div>
+
+	   <div class="col-xs-12">
+	     <button id="subButt" type="button" value="Submit" onclick="buttonizer()">
+	       Submit
+	     </button>
+	   </div>
+	 </form>
+
+       </div>
+     </div>
+
+     <div id="debug">and...</div>
+     
+    
+    
+  </body>
+  
+</html>
