@@ -1,0 +1,28 @@
+$def with (clkrq,tally)
+
+
+<!-- Problem statement -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12"><!--Question Statement-->
+      $clkrq.getQuestion()
+    </div>
+  </div>
+<!--/div-->
+
+<!-- Answer choices-->
+
+  <div class="row">
+    <form>
+      $for ans in clkrq.getChoiceDict():
+           <div class="container"><div class="rounded col-sm-6"
+           id="box$ans">
+           $clkrq.getChoiceDict()[ans] <div style="float:right;display:inline">$tally[ans]%</div></div></div>
+
+
+      </div>
+    </form>
+    
+  </div>
+</div>

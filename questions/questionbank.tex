@@ -1,0 +1,979 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This is the bank of clicker questions. They are tagged
+% and organized by topic. For now each question will have:
+% 1)A commented identifier consisting of the author's initial and a
+% number
+% 2) A list of notions
+% 3) A question statement
+% 4) Answer choices (enclosed in an enumerate environment)
+% 5) The correct answer
+% 
+% N.b. pdf, jpeg, png images are all acceptable
+%
+% The goal is to have a list that easy to chose from.
+% Any figures should be named w.r.t. the identifier of the
+% corresponding question. WHEN ADDING YOUR OWN QUESTIONS PLEASE
+% USE THE APPROPRIATE FORMATTING CONVENTIONS.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+\documentclass{article}
+\usepackage{geometry,amssymb,graphicx,enumerate}
+%\usepackage[all]{xy}
+
+\newenvironment{clkrQuestion}[2]{
+  \begin{minipage}{\textwidth}
+    \vskip .4in
+  \textbf{Id:}\texttt{#1}\\ 
+  \textbf{Tags:}{~#2}\\
+}
+{\end{minipage}}
+
+%These funny commands  are meant to make it easier to convert questions to other formats
+\newcommand{\answer}[1]{\textbf{Answer: }\ref{#1}}
+\newcommand{\explanation}[1]{#1}
+\newcommand{\probstmt}[1]{#1}
+
+\title{MA-121 clicker question bank}
+\begin{document}
+\maketitle
+\begin{clkrQuestion}{JM1}{ma121-l2, asymptotes}
+  The function $f(x)=\frac{2x}{x-2}$ has
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM1A} Vertical asymptote $x=0$, horizontal asymptote $y=1$.
+  \item\label{JM1B} Vertical asymptote $x=2$, no horizontal asymptote.
+  \item\label{JM1C} Vertical asymptote $x=2$, horizontal asymptote $y=2$.
+  \item\label{JM1D} No vertical asymptote, horizontal asymptote $y=2$.
+  \end{enumerate}
+  %
+  \answer{JM1C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM2}{continuity, ma121-l2}
+  If $f(x)$ is continuous, $f(4)=10$ and $f(5)=-2$ then
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM2A} $f(x)$ does not have any roots.
+  \item\label{JM2B} $f(x)$ has exactly one root between 4 and 5.
+  \item\label{JM2C} $f(x)$ has at least one root between 4 and 5.
+  \item\label{JM2D} we have no information about the roots of $f(x)$.
+  \end{enumerate}
+  %
+  \answer{JM2C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM3}{derivatives, units, ma121-l4}
+  The function $C(r)$ gives the total cost in dollars of paying off a
+  loan borrow at an interest rate of $r\%$ per year.  What are the
+  units of $C'(r)$?
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM3A} $\mathrm{years}/\$$
+  \item\label{JM3B} $\$/\mathrm{year}$
+  \item\label{JM3C} $(\% /\mathrm{year})/\$$
+  \item\label{JM3D} $\$/(\%/\mathrm{year})$
+  \end{enumerate}
+  %
+  \answer{JM3D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM4}{derivatives, motion}
+  An elevator moves up and down, and at time $t$, its height above the
+  ground floor is given by the function $h(t)$.  If $$h'(b)<0$$ at
+  time $t=b$, it means that at this time
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM4A} The elevator is moving up.  
+  \item\label{JM4B} The elevator is moving down.
+  \item\label{JM4C} The elevator is decelerating.
+  \item\label{JM4D} The elevator is in the basement.
+  \end{enumerate}
+  %
+  \answer{JM4B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM5}{derivatives, graphs, increase/decrease, ma121-l4}
+  For the graph of the function $y=f(x)$ shown below, which of the
+  following is true?
+  %
+  \begin{center}
+    \includegraphics[scale=0.65]{JM5.pdf}
+  \end{center}
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM5A} $f'(a)>0$
+  \item\label{JM5B} $f'(a)=0$
+  \item\label{JM5C} $f''(a)>0$
+  \item\label{JM5D} $f''(a)<0$
+  \end{enumerate}
+  % 
+  \answer{JM5D}, since at $a$ (in fact, at all points) the graph is concave down.
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM6}{derivatives, motion, ma121-l4}
+  A particle moves along the $x$-axis, and its position at time $t$ is given by $s(t)$. If 
+  $s'(a)>0$, what can we conclude at time $t=a$?
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM6A} The particle is to the right of the origin.
+  \item\label{JM6B} The particle is to the left of the origin.
+  \item\label{JM6C} The particle is moving to the right.
+  \item\label{JM6D} The particle is moving to the left.
+  \end{enumerate}
+  %
+  \answer{JM6C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM7}{derivatives, motion, ma121-l5}
+  The position of an object moving along the $x$-axis is given by
+  $s(t)=t^{2}-2t+1$.  Which of the following is true?
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM7A} Velocity is constant
+  \item\label{JM7B} Acceleration is constant
+  \item\label{JM7C} Acceleration is 0
+  \item\label{JM7D} Velocity is never 0
+  \end{enumerate}
+  % 
+  \answer{JM7B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM8}{derivatives, pitfalls, exponential functions, ma121-l6}
+  If $f(x)=e^{5}$, then $f'(x)$ is
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM8A} $5e^{4}$ 
+  \item\label{JM8B} $\ln(5)e^{5}$
+  \item\label{JM8C} $0$
+  \item\label{JM8D} $e^{4}$
+  \end{enumerate}
+  % 
+  \answer{JM8C}\explanation{The function $f(x)$ is constant.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM9}{derivatives, differentiability, power functions, ma121-l6}
+  Is the function $$f(x)=5x^{\frac{2}{7}}$$ differentiable at $x=0$?
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM9A} Yes
+  \item\label{JM9B} No
+  \end{enumerate}
+  % 
+  \answer{JM8B}\explanation{No.}
+  % 
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM10}{derivatives, increase/decrease, ma121-l6}
+  On what intervals is the function $$f(x)=\frac{2}{3}x^{3}-x^{2}$$ increasing?
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM10A} $(-\infty, 0)$ and $(1,\infty)$
+  \item\label{JM10B} $(0,1)$
+  \item\label{JM10C} $(-\infty, 1)$
+  \item\label{JM10D} $(0, \infty)$
+  \end{enumerate}
+  % 
+  \answer{JM10A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM11}{trigonometry, ma121-l8}
+  \begin{center}
+\includegraphics[width=0.25\textwidth]{JM11.pdf}
+\end{center}
+%
+\begin{enumerate}[A.]
+\item\label{JM11A} 1.8
+\item\label{JM11B} $\frac{1}{1.8}$
+\item\label{JM11C} $\frac{\pi}{1.8}$
+\item\label{JM11D} $\mathrm{arccos}(1.8)$
+\end{enumerate}
+%
+\answer{JM11A}
+\explanation{Since $\theta = \frac{s}{r} = 1.8/1 = 1.8$.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM12}{derivatives, trigonometry, ma121-l8}
+  The derivative of the function $$f(x) =
+  (\sin(x))^{2}+(\cos(x))^{2}$$ is
+  \begin{enumerate}[A.]
+\item\label{JM12A} $2\sin(x)+2\cos(x)$
+\item\label{JM12B} 1
+\item\label{JM12C} $0$
+\item\label{JM12D} $4\sin(x)\cos(x)$
+\end{enumerate}
+%
+\answer{JM12C}
+\explanation{Since $f(x)=1$.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM13}{derivatives, trigonometry, ma121-l8, ma121-l9}
+  Evaluate $$\sin(\arccos(x)).$$
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM13A} $\sqrt{1+x^{2}}$
+  \item\label{JM13B} $x$
+  \item\label{JM13C} $\sqrt{x^{2}-1}$
+  \item\label{JM13D} $\sqrt{1-x^{2}}$
+  \end{enumerate}
+  % 
+  \answer{JM13D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM14}{limits, derivatives, trigonometry, ma121-l8}
+  Evaluate the limit
+  \[
+  \lim_{x\rightarrow \infty} \arcsin\left(\frac{x^{2}+1}{x^{2}+4x}\right)
+  \]
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM14A} 0
+  \item\label{JM14B} $\frac{\pi}{3}$
+  \item\label{JM14C} $\frac{\pi}{4}$
+  \item\label{JM14D} $\frac{\pi}{6}$
+  \end{enumerate}  
+  % 
+  \answer{JM14C}\explanation{Since $\arcsin(1)=\frac{\pi}{4}$.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM15}{limits, trigonometry, ma121-l8}
+  Evaluate the limit 
+  \[
+  \lim_{x\rightarrow 0} \frac{\sin(x)}{x}.
+  \]
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM15A} 0
+  \item\label{JM15B} 1
+  \item\label{JM15C} -1
+  \item\label{JM15D} does not exist 
+  \end{enumerate}
+  %
+  \answer{JM15B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM16}{higher derivatives, trigonometry, ma121-l8}
+  If $f(x)=\sin(x)$, then the third derivative $f'''(x)$ is
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM16A} $\sin(x)$
+  \item\label{JM16B} $-\sin(x)$
+  \item\label{JM16C} $\cos(x)$
+  \item\label{JM16D} $-\cos(x)$
+  \end{enumerate}
+  % 
+  \answer{JM16D}\explanation{Since $f'(x)=\cos(x)$, $f''(x)=-\sin(x)$, $f'''(x)=-\cos(x)$.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM17}{derivatives, inverse trig., chain rule, ma121-l9}
+  The derivative of 
+  \[
+  \mathrm{arctan}(x^{2})
+  \]
+  is
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM17A} $\frac{1}{1+x^{2}}$
+  \item\label{JM17B} $\frac{1}{1+x^{4}}$
+  \item\label{JM17C} $\frac{2x}{1+x^{2}}$
+  \item\label{JM17D} $\frac{2x}{1+x^{4}}$
+  \end{enumerate}
+  % 
+  \textbf{Answer:} D.
+\end{clkrQuestion}
+
+
+\begin{clkrQuestion}{JM18}{derivatives, inverse trig., ma121-l9}
+  The derivative of 
+  \[
+  \mathrm{arcsin}(x)
+  \]
+  is
+  \begin{enumerate}[A.]
+  \item\label{JM18A} $\frac{1}{\sqrt{1-x^{2}}}$
+  \item\label{JM18B} $\frac{1}{\sqrt{x^{2}-1}}$
+  \item\label{JM18C} $-\frac{1}{\sqrt{1-x^{2}}}$
+  \item\label{JM18D} $-\frac{1}{\sqrt{x^{2}-1}}$
+  \end{enumerate}
+  %
+  \answer{JM18A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM19}{limits, inverse trig.,ma121-l8}
+    \[
+    \lim_{x\rightarrow \infty} \mathrm{arctan}(x) = 
+    \]
+    %
+    \begin{enumerate}[A.]
+    \item\label{JM19A} $0$
+    \item\label{JM19B} $\infty$
+    \item\label{JM19C} $1$
+    \item\label{JM19D} $\frac{\pi}{2}$
+    \end{enumerate}
+    % 
+    \answer{JM19D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM20}{implicit differentiation, ma121-l10}
+  If 
+  \[
+  \sqrt{x}+\sqrt{y} = \sqrt{c}
+  \]
+  then $\frac{\mathit{dy}}{\mathit{dx}}=$
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM20A} $\frac{\sqrt{x}}{\sqrt{y}}$
+  \item\label{JM20B} $-\frac{\sqrt{x}}{\sqrt{y}}$
+  \item\label{JM20C} $\frac{\sqrt{y}}{\sqrt{x}}$
+  \item\label{JM20D} $-\frac{\sqrt{y}}{\sqrt{x}}$
+  \end{enumerate}
+  % 
+  \answer{JM20D} 
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM21}{chain rule, logarithms, ma121-l9}
+  The derivative of 
+  \[
+  \ln(x^{2}+x)
+  \]
+  is
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM21A} $\frac{1}{x^{2}+x}$
+  \item\label{JM21B} $\frac{2x+1}{x^{2}+x}$
+  \item\label{JM21C} $\frac{1}{x}(2x+1)$
+  \item\label{JM21D} $\frac{2x+1}{(x^{2}+x)^{2}}$
+  \end{enumerate}
+  % 
+  \answer{JM21B}
+\end{clkrQuestion}
+  
+\begin{clkrQuestion}{JM22}{derivatives, local extrema, ma121-l13}
+  The graph of $f'(x)$ is shown below. \emph{Note:} this is the graph of the derivative, not the function itself. Which 
+  statement is true? 
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{JM22.pdf}
+  \end{center}
+  % 
+  \begin{enumerate}[A.]
+  \item\label{JM22A} $f$ has a local min at 2 and local max at 4
+  \item\label{JM22B} $f$ has a local max at 1 and local min at 4
+  \item\label{JM22C} $f$ has a local max at 1
+  \item\label{JM22D} $f$ has a local min at 1
+  \end{enumerate}
+  % 
+  \textbf{Answer:} C.
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM23}{local extrema, ma121-l13}
+  If  
+  \[
+  f'(x) = (x+3)(x-1)
+  \]
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM23A} $f$ has a local max at -3 and local min at 1
+  \item\label{JM23B} $f$ has a local min at -3 and local max at 1
+  \item\label{JM23C} $f$ has a local min at -3 and 1
+  \item\label{JM23D} $f$ has a local max at -3 and 1
+  \end{enumerate}
+  % 
+  \answer{JM23A}\explanation{$f''(x) = 2(x+1)$, $f''(-3)<0$ so max, $f''(1)>0$, so min.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM24}{critical points, ma121-l13}
+  Which of the following functions has a critical point at $x=0$?
+  \begin{enumerate}[A.]
+  \item\label{JM24A} $f(x) = x$
+  \item\label{JM24B} $f(x) = x^{1/3}$
+  \item\label{JM24C} $f(x) = e^{x}$
+  \item\label{JM24D} $f(x) = \sin(x)$
+  \end{enumerate}
+  % 
+  \answer{JM24B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{JM25}{linear approximation, ma121-l11}
+  Which of the following is the linearization of 
+  \[
+  f(x) = \cos(x)
+  \]
+  at $x=0$?
+  %
+  \begin{enumerate}[A.]
+  \item\label{JM25A} $L(x) = x$
+  \item\label{JM25B} $L(x) = x+1$
+  \item\label{JM25C} $L(x) = 1$
+  \item\label{JM25D} $L(x) = -x$
+  \end{enumerate}
+  % 
+  \answer{JM25C} 
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS1}{asymptotes, ma121-l2}
+  Which of these is the graph $y=\frac{2x}{x-2}$?
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{DS1.pdf}
+  \end{center}
+  \begin{enumerate}[A.]
+  \item\label{DS1A}
+  \item\label{DS1B}
+  \item\label{DS1C}
+  \item\label{DS1D}
+  \end{enumerate}
+  %
+  \answer{DS1B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS2}{asymptotes, rational functions, ma121-l2}
+  If $p(x)$ and $q(x)$ are polynomials and \[
+  \lim_{x\to a} q(x) = 0,
+  \] then $f(x) = \frac{p(x)}{q(x)}$ must have a vertical asymptote at
+  $x=a.$
+  % 
+  \begin{enumerate}[A.]
+  \item\label{DS2A} True
+  \item\label{DS2B} False
+  \end{enumerate}
+  % 
+  \answer{DS2B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS3}{asymptotes, increase/decrease, infinite limits, ma121-l2}
+  If $f(x)$ is an increasing function then\[
+  \lim_{x\to \infty} f(x) = \infty.
+  \]
+  %
+  \begin{enumerate}[A.]
+  \item\label{DS3A} True
+  \item\label{DS3B} False
+  \end{enumerate}
+  %
+  \answer{DS3B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS4}{continuity, piecewise functions, ma121-l3}
+  The following function is continuous everywhere.\[
+  f(x) = \left\{
+    \begin{array}{ll}
+     \frac{x^2-1}{x+1}, & x \neq -1\\
+      -2, & x = -1\\ 
+    \end{array}\right.
+  \]
+  % 
+  \begin{enumerate}[A.]
+  \item\label{DS4A} True
+  \item\label{DS4B} False
+  \end{enumerate}
+  \answer{DS4A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS5}{derivatives, graphs, ma121-l4}
+  Which of the following graphs represents the slope at every point of
+  the function graphed on the left?
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{DS5.pdf}
+  \end{center}
+  % 
+  \begin{enumerate}[A.]
+  \item\label{DS5A}
+  \item\label{DS5B}
+  \item\label{DS5C}
+  \item\label{DS5D}
+  \end{enumerate}
+  % 
+  \answer{DS5D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS6}{derivatives, acceleration , motion, ma121-l4}
+  Suppose that at the moment of time $t_0$ the
+  car is moving away from the initial point $O$.
+  If we know that $s’’(t 0 ) > 0$ then we can
+  conclude that at the moment of time $t_0$
+\begin{enumerate}[A.]
+  \item\label{DS6A}the car is slowing down
+  \item\label{DS6B}the car is speeding up
+  \item\label{DS6C}the velocity of the car does not change
+  \item\label{DS6D}nothing can be said
+  \end{enumerate}
+  % 
+  \answer{DS6B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS7}{derivatives, motion, ma121-l4}
+  A particle is moving along the $x$-axis. At any
+  moment of time $t$, its position on the axis is
+  denoted by $x(t)$.
+  If $x’(t 0 ) < 0$ then at the moment of time $t_0$
+  \begin{enumerate}[A.]
+  \item\label{DS7A}the particle is moving to the left
+  \item\label{DS7B}the particle is moving to the right
+  \item\label{DS7C}nothing can be said
+  \end{enumerate}
+  \answer{DS7A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS8}{derivatives, second derivative, applications,ma121-l5}
+  Ice cream is being poured into a giant ice
+  cream cone at a constant rate. Let $H(t)$ be
+  the height of the ice cream at time $t$. $H"(t)$
+  is
+  \begin{enumerate}[A.]
+  \item\label{DS8A} 0
+  \item\label{DS8B} Positive
+  \item\label{DS8C} Negative
+  \end{enumerate}
+  \answer{DS8C}
+  %Perhaps some liquid other than ice cream would be appropriate.
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS9}{differentiability, ma121-l5}
+  Let $g(x) = |x - 1|$. This function is not
+  “smooth” at $x = 1$. We therefore know that
+  \begin{enumerate}[A.]
+  \item\label{DS9A} the tangent line at $x = 1$ has slope $0$
+  \item\label{DS9B} the tangent line at $x = 1$ is not defined
+  \item\label{DS9C} the tangent line at $x = 1$ has slope $-1$
+  \item\label{DS9D} the tangent line at $x = 1$ has slope $1$
+  \end{enumerate}
+  \answer{DS9B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS10}{differentiability, product rule, ma121-l7}
+  The derivative of $f(x) = x|x|$
+  at $x= 0$
+  \begin{enumerate}[A.]
+  \item\label{DS10A} Does not exist, because $|x|$ is not differentiable
+    at $x = 0$.
+  \item\label{DS10B} Does not exist, because $f$ is defined
+    piecewise.
+  \item\label{DS10C} Does not exist, because the left and right
+    hand limits do not agree.
+  \item\label{DS10D} Is $0$
+  \end{enumerate}
+  \answer{DS10D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS11}{chain rule, ma121-l7}
+  \[
+  \frac{d}{dx}\left(e^x + x^2\right)^2=
+  \]
+  \begin{enumerate}[A.]
+  \item\label{DS11A}$2\left(e^x + x^2\right)$
+  \item\label{DS11B}$2\left(e^x + 2x\right)\left(e^x + x^2\right)^2$
+  \item\label{DS11C}$2\left(e^x + x^2\right)^2$
+  \item\label{DS11D}$2\left(e^x + 2x\right)\left(e^x + x^2\right)$
+  \end{enumerate}
+  \answer{DS11D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS12}{quotient rule, ma121-l7}
+  Suppose $f(3)=2$, $f'(3)=4$, $g(3)=1$, and $g'(3)=3$. If $h(x) =
+  \frac{f(x)}{g(x)}$, then what is $h'(3)?$
+  \begin{enumerate}[A.]
+  \item\label{DS12A}$-2$.
+  \item\label{DS12B} $2$.
+  \item\label{DS12C} $\frac{-2}{9}$.
+  \item\label{DS12D} $\frac 2 9$.
+  \item\label{DS12E} $5$.
+  \end{enumerate}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS13}{product rule, ma121-l7}
+  The functions $f(x)$   and $h(x)$ are plotted below.
+  \begin{center}
+    \includegraphics[width=0.75\textwidth]{DS13.pdf}
+  \end{center}
+  If $g(x) = 2 f(x) h(x)$ then what is $g’(2)$?
+  \begin{enumerate}[A.]
+  \item\label{DS13A} $g'(2)=1$
+  \item\label{DS13B} $g'(2)=2$
+  \item\label{DS13C} $g'(2)=4$
+  \item\label{DS13D} $g'(2)=32$
+  \end{enumerate}
+  \answer{?}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS14}{higher derivatives, trig. functions, ma121-l8}
+  The $41$st derivative of $\sin(x)$ is
+  % 
+  \begin{enumerate}[A.]
+   \item\label{DS14A} $\sin(x)$
+   \item\label{DS14B} $\cos(x)$
+   \item\label{DS14C} $-\sin(x)$
+   \item\label{DS14D} $-\cos(x)$
+  \end{enumerate}
+  % 
+  \answer{DS14B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS15}{chain rule, trig. functions, ma121-l8}
+  \[\frac d{dx} \sin(2x)=\]
+  \begin{enumerate}[A.]
+   \item\label{DS15A} $\cos(2x)$
+   \item\label{DS15B} $2\cos(2x)$
+   \item\label{DS15C} $2\cos(x)$
+   \item\label{DS15D} none of the above
+  \end{enumerate}
+  % 
+  \answer{DS15B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS16}{trigonometry, ma121-l8}
+  \[ \tan\left(\arcsin\left(\frac 1 3\right)\right)=\]
+  \begin{enumerate}[A.]
+   \item\label{DS16A} $\frac{1}{\sqrt 2}$
+   \item\label{DS16B} $\frac{1}{\sqrt 3}$
+   \item\label{DS16C} $\frac{1}{1\sqrt 2}$
+   \item\label{DS16D} $\frac{1}{\sqrt{10}}$
+  \end{enumerate}
+  % 
+  \answer{?}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS17}{limits, inv. trig., ma121-l2, ma121-l9}
+  \[\lim_{x\to -1} \arcsin(x-1)=\]
+  \begin{enumerate}[A.]
+  \item\label{DS17A} $1$
+  \item\label{DS17B} $-1$
+  \item\label{DS17C} $0$
+  \item\label{DS17D} does not exist
+  \end{enumerate}
+  % 
+  \answer{DS17C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS18}{logarithms, differentiation, pitfalls, ma121-l9}
+  True or false
+  \[\frac d{dx} \ln(\pi) = \frac 1 \pi\]
+  \begin{enumerate}[A.]
+  \item\label{DS18A} True
+  \item\label{DS18B} False
+  \item\label{DS18C} Not enough information
+  \end{enumerate}
+  %
+  \answer{DS18B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS19}{tangent lines, implicit differentiation, ma121-l10}
+  The equation of the tangent line to the unit
+  circle $x^2 + y^2 = 1$ at the point $(0,1)$ is
+\begin{enumerate}[A.]
+  \item\label{DS19A} $y=0$
+  \item\label{DS19B} $x=0$
+  \item\label{DS19C} $x=1$
+  \item\label{DS19D} $y=1$
+  \item\label{DS19E} The tangent line doesn't exist 
+  \end{enumerate}
+  % 
+  \answer{DS19D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS20}{tangent lines, implicit differentiation, pitfalls, ma121-l10}
+  The equation of the tangent line to the unit
+  circle $x^2 + y^2 = 1$ at the point $(1,0)$ is
+\begin{enumerate}
+  \item\label{DS20A} $y=0$
+  \item\label{DS20B} $x=0$
+  \item\label{DS20C} $x=1$
+  \item\label{DS20D} $y=1$
+  \item\label{DS20E} The tangent line doesn't exist since it has
+    infinite slope
+  \end{enumerate}
+  % 
+  \answer{DS20C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS21}{tangent lines, implicit differentiation,
+    trig. functions, ma121-l10}
+  The slope of the line tangent to the curve $x
+  = sin(y)$ at the point $(0, \pi)$ is
+  \begin{enumerate}[A.]
+  \item\label{DS21A} $1$
+  \item\label{DS21B} $-1$
+  \item\label{DS21C} undefined
+  \end{enumerate}
+  % 
+  \answer{DS21A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS22}{limear approximation, ma121-l11}
+  If $e^{0.5}$ is approximated by using the tangent
+  line to the graph of $f(x) = e^x$ at $(0,1)$, and we
+  know $f’(0) = 1$, the approximation is
+  \begin{enumerate}[A.]
+  \item\label{DS22A} $0.5$
+  \item\label{DS22B} $1+e^{-0.5}$
+  \item\label{DS22C} $1+0.5$
+  \end{enumerate}
+  \answer{DS22C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS23}{rational functions, asymptotes, ma121-l2, ma121-l12}
+  Which of the following graphs represents \[
+  y = \frac{2x^2}{x^2+x-2}
+  \]
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{DS23.pdf}
+  \end{center}
+  \begin{enumerate}[A.]
+  \item\label{DS23A}
+  \item\label{DS23B}
+  \item\label{DS23C}
+  \item\label{DS23D}
+  \end{enumerate}
+  % 
+  \answer{DS23C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS24}{graphs, global extrema, ma121-l13}
+  Where is the global minimum of $f(x)$?
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{DS24.pdf}
+  \end{center}
+  \begin{enumerate}[A.]
+  \item\label{DS24A} at $x=x_3$
+  \item\label{DS24B} at $x=x_7$
+  \item\label{DS24C} at $x=x_9$
+  \item\label{DS24D} no global minimum
+  \end{enumerate}
+  % 
+  \answer{DS24D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS25}{graphs, global extrema, ma121-l13}
+   Where is the global maximum of $f(x)$?
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{DS24.pdf}
+  \end{center}
+  \begin{enumerate}[A.]
+  \item\label{DS25A} at $x=x_8$
+  \item\label{DS25B} at $x=x_5$
+  \item\label{DS25C} at $x=x_10$
+  \item\label{DS25D} no global maximum
+  \end{enumerate}
+  % 
+  \answer{DS25B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{DS26}{graphs, local extrema, ma121-l13}
+   How manu local extrema does $f(x)$ have?
+  \begin{center}
+    \includegraphics[width=0.5\textwidth]{DS24.pdf}
+  \end{center}
+  \begin{enumerate}[A.]
+  \item\label{DS26A} 5
+  \item\label{DS26B} 6
+  \item\label{DS26C} 7
+  \item\label{DS26D} 8
+  \end{enumerate}
+  % 
+  \answer{DS26C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT0}{asymptotes, graphing, continuity, ma121-l2}
+  Let $f(x)$ be continuous on $(0,\infty)$. True or false. If \[
+  \lim_{x\to 0^+}f(x)=\infty, \lim_{x\to \infty}f(x)=-3
+  \] then $f(x)$ must be decreasing on $(0,\infty).$
+  \begin{enumerate}[A.]
+  \item\label{NT0A} True
+  \item\label{NT0B} False
+  \end{enumerate}
+  %
+  \answer{NT0B}
+  \explanation{Draw a graph.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT1}{asymptotes, graphing, continuity, ma121-l2}
+  Let $f(x)$ be continuous on $(0,\infty)$. True or false. If \[
+  \lim_{x\to 0^+}f(x)=\infty, \lim_{x\to \infty}f(x)=-3
+  \] and if $f(x)$ is decreasing on $(0,\infty)$ , then for any $c>0$
+  we never have $f(c)=-4$.
+  \begin{enumerate}[A.]
+  \item\label{NT1A} True
+  \item\label{NT1B} False
+  \end{enumerate}
+  %
+  \answer{NT1A}
+  \explanation{Draw a graph.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT2}{asymptotes, graphing, continuity, ma121-l2}
+  Let $f(x)$ be continuous on $(0,\infty)$. True or false. If \[
+  \lim_{x\to 0^+}f(x)=\infty, \lim_{x\to \infty}f(x)=-3
+  \] then there must be some $c>0$ such that $f(c)=0$.
+  \begin{enumerate}[A.]
+  \item\label{NT2A} True
+  \item\label{NT2B} False
+  \end{enumerate}
+  %
+  \answer{NT2A}
+  \explanation{Draw a graph.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT3}{asymptotes, graphing, continuity, ma121-l2}
+  Let $f(x)$ be continuous on $(0,\infty)$. True or false. If \[
+  \lim_{x\to 0^+}f(x)=-\infty, \lim_{x\to \infty}f(x)=3
+  \] then it is impossible for there to be some $c>0$ such that $f(c)=4$.
+  \begin{enumerate}[A.]
+  \item\label{NT3A} True
+  \item\label{NT3B} False
+  \end{enumerate}
+  %
+  \answer{NT3B}
+  \explanation{The graph may bump up above 4.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT4}{asymptotes, graphing, continuity, ma121-l2}
+  Let $f(x)$ be defined on $(0,\infty)$. True or false. If
+  \[ \lim_{x\to 0^+}f(x)=-\infty, \lim_{x\to \infty}f(x)=3
+  \] then there must be some $c>0$ such that $f(c)=0$.
+  \begin{enumerate}[A.]
+  \item\label{NT4A} True
+  \item\label{NT4B} False
+  \end{enumerate}
+  %
+  \answer{NT4B}
+  \explanation{The graph may have a jump discontinuity.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT5}{instantaneous velocity, units, ma121-l1, ma121-l4}
+  The position $p(t)$ of a particle (in meters) as a function of time
+  $t$ (in seconds) is given by the following table:
+  \[\left|
+    \begin{array}{c|c|c|c|c|c|c|c|c|c}
+      \hline
+      t&1&2&3&4&5&6&7&8&9\\
+      \hline
+      p(t)&1&2&3&4&5&6&7&8&9\\      
+      \hline
+    \end{array}
+  \right|.\]
+  True or false. For $1\leq t \leq 9$, the particle
+  must have been  travelling at $3.6$ km/h.
+  \begin{enumerate}[A.]
+  \item\label{NT5A} True 
+  \item\label{NT5B} False 
+  \end{enumerate}
+  \answer{NT5B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT6}{instantaneous velocity, units, ma121-l1, ma121-l4}
+  The position $p(t)$ of a particle (in meters) as a function of time
+  $t$ (in seconds) is given by the following table:
+  \[\left|
+    \begin{array}{c|c|c|c|c|c|c|c|c|c}
+      \hline
+      t&1&2&3&4&5&6&7&8&9\\
+      \hline
+      p(t)&1&2&3&4&5&6&7&8&9\\      
+      \hline
+    \end{array}
+  \right|.\]
+  True or false. There is some $1\leq c \leq 9$ such that at $t=c$ the
+  particle was travelling at least at $36$ km/h. (Teleportation is not
+  allowed.)
+  \begin{enumerate}[A.]
+  \item\label{NT6A} True 
+  \item\label{NT6B} False 
+  \end{enumerate}
+  \answer{NT6A}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{MS1}{rates of change, ma121-l4}
+  We know $V(r) = 4/3 \pi r^3,$ where r is the radius in inches and
+  $$V(r)$$ is in cubic inches.  The expression represents $$
+  \frac{V(3)-V(1)}{3-1} $$
+  \begin{enumerate}[A.]
+  \item\label{MS1A} The average rate of change of the radius with
+    respect to the volume when the radius changes from 1 inch to 3
+    inches. 
+  \item\label{MS1B}The average rate of change of the radius with
+    respect to the volume when the volume changes from 1 cubic inch to
+    3 cubic inches. 
+  \item\label{MS1C}The average rate of change of the volume with
+    respect to the radius when the radius changes from 1 inch to 3
+    inches. 
+  \item\label{MS1D}The average rate of change of the volume with
+    respect to the radius when the volume changes from 1 cubic inch to
+    3 inches. 
+  \end{enumerate}
+  \answer{MS1C}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{MS2}{rate of change, ma121-l4}
+  We know $V(r) = 4/3 \pi r^3$, where r is the radius in inches
+  and $V(r)$ is in cubic inches.  Which of the following represents
+  the rate at which the volume is changing when the radius is 1 inch? 
+  \begin{enumerate}[A.]
+  \item\label{MS2A} $\frac{V(1.01)-V(1)}{0.01}=12.69 \mathrm{in}^3$.
+  \item\label{MS2B} $\frac{V(0.99)-V(1)}{-0.01}=12.69 \mathrm{in}^3$.
+  \item\label{MS2C} $\lim_{h \to 0}\frac{V(1+h)-V(1)}{h}$.
+  \item\label{MS2D} All of the above.
+  \end{enumerate}
+  \answer{MS2D}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT7}{continuity, ma121-l1, ma121-l2, ma121-l3}
+    Which of the following functions are not continuous?
+    \begin{enumerate}
+        \item\label{NT7A} Gravitational force as a function of distance from a star.
+        \item\label{NT7B} Population of a city as a function of time.
+        \item\label{NT7C} The mass of a beaker being filled with water as a function of the water level.
+        \item\label{NT7D} The absolute value function
+    \end{enumerate}
+    \answer{NT7B}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT8}{average velocity, exponents, ma121-l1, ma121-l3}
+    Using the formula $KE=\frac{1}{2}m v^2$ and the kinetic theory of  gases, we have the following formula for a nitrogen molecule at room pressure and temperature:
+    \[
+    v = \sqrt{\frac{2KE}{m}}    
+    \] where the mass of a molecule is $m=4.65 \cdot 10^{-26}$ kg and we have the kinetic energy $2KE = 1.25 \cdot 10^{-20}$ J. Of what order of magnitude is the average velocity of a nitrogen molecule in this room over one second?
+    \begin{enumerate}[A.]
+        \item\label{NT8A} meters per second.
+        \item\label{NT8B} 100s of meters per second.
+        \item\label{NT8C} 10,000s of meters per second.
+        \item\label{NT8D} 100,000s of meters per second.
+    \end{enumerate}
+    \answer{NT8A}
+    \explanation{The wind speed in the room is of the order of one meter per second. If we look at the average velocity over very small times, however, we will approach something to the order 100 m/s.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT9}{quotient rule, pitfalls, ma121-l7}
+    The following is correct\[
+    \frac d {dx} \left(\frac{x^2}{\pi} \right)= \frac{2x\pi -x^2\cdot 0}{\pi^2}
+    \]  
+    \begin{enumerate}[A.]
+    \item\label{NT9A} True
+    \item\label{NT9B} False
+    \end{enumerate}
+    \answer{NT9A}
+    \explanation{It is correct, but dumb. $\pi$ is a constant. }
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT10}{quotient rule, pitfalls, ma121-l7}
+    The following is correct\[
+    \frac d {dx} \left(\frac{\sqrt{x}}{x} \right)= \frac{\sqrt{x} - \left(\frac 1 2 \cdot \frac{1}{\sqrt x}\cdot x\right)}{x}
+    \]  
+    \begin{enumerate}[A.]
+    \item\label{NT10A} True
+    \item\label{NT10B} False
+    \end{enumerate}
+    \answer{NT10B}
+    \explanation{There is a sign mistake. Also this is a dumb way to do it. This expression can be simplified first.}
+\end{clkrQuestion}
+
+\begin{clkrQuestion}{NT11}{Extreme Value Theorem, ma121-l13}
+    Let $f(x)$ be a function that is increasing on the interval $[a,b]$ which of the following statements is correct?
+    \begin{enumerate}
+        \item\label{NT11A} If $f$ is differentiable and  $f'(x) >0$ on $[a,b]$, then no global maximum or minimum is attained.
+        \item\label{NT11B} $f$ attains a global minimum at $b$.
+        \item\label{NT11C} $f$ may attain global maximum inside $(a,b)$.
+        \item\label{NT11D} Nothing can be said, since $f$ is not given.
+    \end{enumerate}
+    \answer{NT11B}
+\end{clkrQuestion}
+
+\end{document}

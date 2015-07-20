@@ -1,17 +1,19 @@
 function upDate(){
-   var subBut=document.getElementById("subButt")
-   if (state == "closed"){
-	subBut.style.visibility = "hidden";
-   }
-   else{
-	subBut.style.visibility = "visible";
-   }
+    var msgbox=document.getElementById("message")
+    switch(state){
+    case "reload":
+	history.go(0);
+	msgbox.innerHTML=state;
+	break;
+    default:
+	msgbox.innerHTML=state;
+    }
 }
 
 
 function syncState()
 {
-    var qstring = "/comet/"+state;
+    var qstring = "/comet/?state="+state+"&page="+page;
     var stateReq;
     stateReq=new XMLHttpRequest();
     
@@ -21,7 +23,9 @@ function syncState()
 	{
 	    var response = stateReq.responseText;
 	    state = response;
-	    syncState();
+	    if (state != "reload"){
+		syncState();
+	    }
 	    upDate();
 	}
     }

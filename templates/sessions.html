@@ -1,0 +1,56 @@
+$def with(yoursession,sessdic)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- <meta name="description" content=""> -->
+    <!-- <meta name="author" content=""> -->
+
+    <title>Current sessions</title>
+    
+
+    <!-- Le Bootstrap -->
+    <link rel="stylesheet" type="text/css"
+	  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!--link href="/static/signin.css" rel="stylesheet"-->
+    <!-- Finished le Bootstrap-->
+
+    
+  </head>
+
+  <body>
+    <div class = "container">
+      <div class="row">
+	<div class="col-xs-12">
+	  <h3>The following session is currently
+	    loaded:</h3>
+	  <a href="/conduct/$yoursession"> $yoursession . Click to continue.</a> 
+	  
+	</div>
+      </div>
+    </div>
+    
+    <div class="container">
+      <div class="row">
+	<div class="col-xs-12">
+	  Here are sessions assigned to other sessions. Click the
+	  session to continue.
+	  <table style="width:100%" border="1">
+	    <tr>
+	      <th>Section</th>
+	      <th>Session</th>
+	    </tr>
+	    $for i in sessdic:
+	         <tr><td>$i</td><td><a href="/conduct/$sessdic[i]">$sessdic[i]</a></td></tr>
+
+	  </table>
+	</div>
+      </div>
+    </div> <!-- Container -->
+
+  </body>
+

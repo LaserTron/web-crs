@@ -1,0 +1,19 @@
+/* question-styles
+-------------------------------------------------- */
+
+.rounded {
+    border-radius: 10px;
+    border: 2px solid gray;/*#8AC007;*/
+    padding: 3px; 
+    /*width: 200px;
+    height: 150px;*/ 
+}
+
+.container {
+  /*width: auto;*/
+  /*max-width: 680px;*/
+  padding: 15px;
+}
+.container .text-muted {
+  margin: 20px 0;
+}

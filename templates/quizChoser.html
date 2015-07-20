@@ -1,0 +1,27 @@
+$def with (name,quizlists)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Pick a quiz</title>
+  </head>
+
+  <body>
+    <p>
+      Hello $name. Here is a list of existing quizzes. Click one to
+      preview or edit it.
+    </p>
+    <ul>
+      $for q in quizlists:
+           <li> <a href="/compose/?quiz=$q">$q</a>
+    </ul>
+    
+    <p>
+      If you want to create a new quiz enter its name here:
+      <form action="/addQuiz/" method="POST">
+	<input type="text", id="newquiz", name="newquiz">
+	<input type="submit" value="Create new quiz">
+      </form>
+    </p>
+    
+  </body>
+

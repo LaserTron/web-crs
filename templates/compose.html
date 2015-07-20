@@ -1,0 +1,30 @@
+$def with (quizID,qresults,qlist)
+ <link href="/static/compose.css" rel="stylesheet">
+
+
+ <topper class = "topper">
+   <div class="container">
+    
+     <form method="POST">
+        <h2>$quizID <button type="submit" formaction="/assign/?quiz=$quizID">Assign</button></h2>
+       <table>
+	 <tr>
+	   <td>Search for tag:</td><td> <input type="text" id="reqTag" name="tag"></td><td><button type="submit"
+						formaction="/compose/?quiz=$quizID">Search </button></td>
+	 </tr>
+	 <tr>
+	   <td>Current questions:</td><td><input type="text", id="quizlist", name="quizlist", value="$qlist"></td><td><button type="submit"
+					 formaction="/preview/?quiz=$quizID">
+	       Preview</button></td></tr>
+	  <tr>
+	    
+       </table>
+    </form>
+   </div>
+ </topper>
+
+
+$for q in qresults:
+     <h2>$q.ID</h2>
+     $:q.getRendered()
+

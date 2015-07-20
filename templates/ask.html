@@ -1,4 +1,4 @@
-$def with (body,qnumber,state)
+$def with (body,qnumber)
 <!DOCTYPE html>
 <html>
   <head>
@@ -22,33 +22,24 @@ $def with (body,qnumber,state)
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
     <script src="/static/control.js"></script>
-    <script src="/static/question.js"></script>
+    <script src="/static/ask.js"></script>
     <script type="text/javascript">syncState();</script>
-
-    <!-- Some inline javascript-->
-    <script>
-      var page="$qnumber";
-      var state="$state";
-      syncState();
-    </script>
-    <!-- End of inline javascript-->
-
   </head>
   
   <body><!-- need the dolar colon thing!-->
-    <!-- TODO add a function that sets everything to zero-->
     <div class="container">
       <h2>Question $qnumber</h2>
     </div>
     $:body
 
-    <!-- Add a status div -->
-
-    <div class="status" id="debug"></div>
-    <div class="status" id="message"></div>
-     <script>
-       document.getElementById("debug").innerHTML=page;
-     </script>
-     
+    <div class="container">
+      <div class="row" align="center">
+	<form method="post">
+	  <button formaction="/conduct/close">Close</button>
+	  <button formaction="/conduct/scores">Scores</button>
+	  <button formaction="/conduct/next">Next</button>
+	</form>
+      </div>
+    </div>
   </body>
 </html>
