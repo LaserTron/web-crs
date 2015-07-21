@@ -1,0 +1,28 @@
+$def with (clkrq)
+
+
+<!-- Problem statement -->
+
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12"><!--Question Statement-->
+      $clkrq.getQuestion()
+    </div>
+  </div>
+<!--/div-->
+
+<!-- Answer choices-->
+<!--div class="container"-->
+  <div class="row">
+    <form>
+      $for ans in clkrq.getChoiceDict():
+           <div class="col-sm-6 container"><div class="rounded" id="box$ans"><div class="percentage" id="$ans"></div>$clkrq.getChoiceDict()[ans] </div></div>
+<!-- Add some javascript that reinitializes all the questions -->
+
+      </div>
+    </form>
+    
+  </div>
+</div>
+
+<!--div id="debug">and...</div-->
