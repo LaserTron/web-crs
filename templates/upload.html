@@ -1,0 +1,33 @@
+$def with (item)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>$item upload page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrab, jquery etc.   -->
+    <!--          BEGIN                     -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Bootstrab, jquery etc.   -->
+    <!--          END                      -->   
+  </head>
+  
+  <body><!-- need the dolar colon thing!-->
+    <div class="container"><h1>$item upload</h1>
+      Warning: make sure the file you are uploading is well formed;
+      there is nothing to check that everything is in order. The
+      existing data will be overwritten.
+    </div>
+    <div class="container">
+     <form method="POST" enctype="multipart/form-data" action="/upload/$item">
+       <input type="file" name="upfile" />
+       <br/>
+       <input type="submit" />
+     </form>
+    </div>
+  </body>
+</html>
