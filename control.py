@@ -92,16 +92,25 @@ def addSection(nam):
     if not res:#no user there
         ctrl.insert('sections', name = nam)
 
-def addStudent(user,sec):#adds a user whose role is either
+def addStudent(user,sec):#adds a student
     user=user.strip()
     res = isInTable('students','username', user)
     if not res:#no user there
         ctrl.insert('students',username = user, section = sec)
     sec = sec.strip()#ensures section is added as well, if necessary
-    res = inInTable('sections','name',sec)
+    res = isInTable('sections','name',sec)
     if not res:
         addSection(sec)
 
+def populateSections():
+    """
+    This method populates the section list from the student roster.
+    """
+    #ISSUE this is a hack
+    stus = ctrl.select("students")
+    for i in stus:
+        addStudent(i["username"],i["section"])
+    
 def getStudentsBySec(section):
     """
     Returns the list of student usernames in a given section

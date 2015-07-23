@@ -162,6 +162,9 @@ class manage:
     def GET(self):
         instr = getUsername()
         allsections = control.getSections()
+        print allsections
+        for i in allsections:#repopulate section list in case of roster change
+            control.addSection(i)
         allsections.sort()
         yoursections = control.getInstrSections(instr)
         formguts = []
@@ -383,6 +386,8 @@ class upload:
             db = rosters[item][0]
             table = rosters[item][1]
             csvsql.csvOverwrite(db,table,fstr)
+            if item == "students":
+                control.populateSections()
             return "File uploaded and database updated. Use the back button"
         
 class sandbox:
