@@ -2,7 +2,7 @@
 Author: Nicholas Touikan
 
 ##What is it?
-It is a web application designed for conducting in-class quizzes, i.e. a classroom response system. Originally it is intended for calculus classes. This program is distributed under the GNU Lesser General Public License.
+It is a web application designed for conducting in-class quizzes, i.e. a classroom response system. Originally it is intended for calculus classes and is intended to be run from a personal computer. This program is distributed under the GNU Lesser General Public License.
 
 ##Current features:
 * The problem bank is written in LaTex.
@@ -31,7 +31,7 @@ It is a web application designed for conducting in-class quizzes, i.e. a classro
 ##How to get it running:
 Download the directory, ensure the required packages and python 2 modules are installed,  and type: `python2 webcrs.py`
 
-To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`.
+To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. Other users connect by pointing their browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar .
 
 Go to the manage database page and download the question bank. With any latex knowledge you should figure out how to compose your own question. Using the upload link you can overwrite the old questionbank with your own questions.
 
