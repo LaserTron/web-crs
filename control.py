@@ -1,5 +1,5 @@
 import web
-from gradebook import getSessionQuestions
+import gradebook
 from hashlib import sha1
 
 #
@@ -160,7 +160,7 @@ def advanceSession(session):
     Increments the question number. Sets the session to finished if 
     finished.
     """
-    quizstr = getSessionQuestions(session)
+    quizstr = gradebook.getSessionQuestions(session)
     quizli = quizstr.split(',')
     length = len(quizli)
     curpage = getSessionPage(session)

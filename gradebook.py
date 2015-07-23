@@ -11,6 +11,11 @@ import clickerQuestions as cq
 # Requires a database with tables for sections, each table hasa a 'username' column
 #
 
+# ISSUES:
+# sqlite3 module is no longer necessary since we can use 
+# gdbk.query(foo) instead of cur.execute(foo). Also using keyword
+# dictionnaries, we can pass keys as arguments.
+
 gdbk = web.database(dbn="sqlite",db="gradebook.db")
 gdbk.ctx.db.text_factory=str #erm... I have NO CLUE what this means :-/
 
@@ -78,7 +83,7 @@ def setAnswer(student,choice,value):#This is a bit of a hack...
     cur = con.cursor()
     value=str(value)#in case saved as int
     section = control.getUserSection(student)
-    sqlstring = "UPDATE {0} SET {1}=\'{2}\' WHERE username=\'{3}\'".format(section,choice,value,student)
+    sqlstring = "UPDATE {0} SET {1}=\'{2}\' WHERE username=\'{3}\'".format(section,choice,value,student) #this can be fixed with a keyword dict
     # print section
     #print sqlstring
     cur.execute(sqlstring)

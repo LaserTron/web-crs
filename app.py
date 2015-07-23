@@ -3,10 +3,9 @@ import control
 import gradebook
 from time import sleep
 from web import form
-#from question import getQuestion #for testing
 import questions
 import clickerQuestions as cq
-
+import csvtosqlite3 as csvsql
 
 ############
 # This block is supposed to get HTTPS going.
@@ -21,12 +20,15 @@ import clickerQuestions as cq
 #############
 
 #############
-#Notes:
+#Issues:
 #############
 #
-# Some sort of validation function is needed to prevent
-# impersonation attacks
-# 
+# Some sort of validation/password authentication function
+# is needed to prevent impersonation attacks.
+#
+# As currently implemented an unauthorized user can obtain
+# sensitive information from the download method.
+#
 #############
 
 urls = (#this delcares which url is activated by which class
@@ -43,10 +45,22 @@ urls = (#this delcares which url is activated by which class
     '/manage/', 'manage',
     '/assign/', 'assign',
     '/sessions/', 'sessions',
-    '/prog/(.+)','progress'
+    '/prog/(.+)','progress',
+    '/databases/','databases',
+    '/dbview/(.+)','dbview',
+    '/download/(.+)','download',
+    '/upload/(.+)','upload',
+    '/sandbox','sandbox'
+    
 )
 
 render = web.template.render('templates/')
+
+questionBankLocation = cq.banklocation
+rosters = { #these are pairs of where the database tables
+    "students":["control.db","students"],
+    "instructors":["control.db","instructors"],
+}
 
 def getUsername():
     username=web.cookies().get('clicker-username')
@@ -73,7 +87,8 @@ class index:
         elif control.isInTable('students','username',username):
             destination = '/quiz/{0}'.format(username)
         else:
-            return username +' not found'#render.login()#TODO add error message!
+            raise web.seeother("/logout")
+            #return username +' not found'#render.login()#TODO add error message!
         raise web.seeother(destination)
             
     def POST(self):
@@ -85,6 +100,11 @@ class index:
 
 class question:
     def GET(self,username):
+        #####
+        # Issues: There is a current bug: if a student refreshes
+        # the page it no longer shows the state of their selection.
+        #####
+        
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
         state = control.getSessionState(sess)
@@ -96,7 +116,7 @@ class question:
         
 class Comet:
     def GET(self):
-        #idea make this take an argument and return a new state. If the state is old then don't return anything. The client also has to loop.
+        #Take an argument and return a new state. If the state is old then don't return anything. The client also has to loop to request a new state.
         username = getUsername()
         wi = web.input()
         state=wi.state
@@ -128,26 +148,6 @@ class submit:
         qnumber = control.getSessionPage(session)
         return gradebook.toggleChoice(user,session,qnumber,choice)
     
-# class submit:#this is to submit answers
-#     def GET(self,state):
-#         student=web.cookies().get('clicker-username')
-#         if student == None:
-#             return render.login() 
-#         stateli = state.split('/XXX/')
-#         print stateli
-#         entered = stateli[0]
-#         entered = entered.split("/")
-#         if u"" in entered: entered.remove(u"")
-#         print entered
-#         nonentered = stateli[1]
-#         nonentered = nonentered.split("/")
-#         if u"" in nonentered: nonentered.remove(u"")
-#         print nonentered
-#         for i in entered:
-#             gradebook.setAnswer(student,i,1)
-#         for i in nonentered:
-#             gradebook.setAnswer(student,i,0)
-#         return "Server reports the following are entered: "+str(entered)
 
 class logout:
     """
@@ -155,7 +155,8 @@ class logout:
     """
     def GET(self):
         web.setcookie('clicker-username','',expires=-1)
-        return "Login cookie deleted"
+        raise web.seeother("/")
+        #return "Login cookie deleted"
 
 class manage:
     def GET(self):
@@ -241,8 +242,8 @@ class preview:
         questions.setQuizQuestions(quiz,newqlist)
         hits = questions.getQblocks(quiz)
         hits = map(cq.clkrQuestion,hits)
-        prev = render.compose(quiz,hits,newqlist)
-        return render.bootstrap(prev)
+        return render.compose(quiz,hits,newqlist)
+#        return render.bootstrap(prev)
         
 class compose:#no argument means start a new quiz
     def GET(self):
@@ -253,8 +254,8 @@ class compose:#no argument means start a new quiz
             return render.quizChoser(username,qlist)
         else:
             quizlist = questions.getQuizQuestions(i['quiz'])
-            body = render.compose(i['quiz'],[],quizlist)
-            return render.bootstrap(body)
+            return render.compose(i['quiz'],[],quizlist)
+#            return render.bootstrap(body)
 
     def POST(self):
         i=web.input()
@@ -266,8 +267,8 @@ class compose:#no argument means start a new quiz
         quizlist = questions.getQuizQuestions(i['quiz'])
         hits = questions.getWithTag(tag)
         qresults = map(cq.clkrQuestion,hits)
-        body = render.compose(quiz,qresults,quizlist)
-        return render.bootstrap(body)
+        return render.compose(quiz,qresults,quizlist)
+
 
 class instructor:
     def GET(self):
@@ -337,8 +338,57 @@ class conduct:
 #             page = control.getSessionPage(sess)
 #             tally = gradebook.tallyAnswers(sess,page)
 #         return action
-    
-    
+
+class databases:
+    def GET(self):
+        grades=csvsql.getTables("gradebook.db")
+        grades.remove("sessions") #sessions is not a gradebook 
+        return render.databases(grades)
+
+class dbview:
+    def GET(self,table):
+        if table in rosters:
+            rdr = csvsql.sqlite3TableToIter(*rosters[table])
+        else:
+            rdr = csvsql.sqlite3TableToIter("gradebook.db",table)
+        return render.bootstrap(table,render.tableDisplay(rdr))
+
+class download:
+    def GET(self,request):
+        if request == "qbank":
+            f = open(questionBankLocation,'r')
+            output = f.read()
+        elif request in rosters:
+            output = csvsql.sqlite3toCSVstring(*rosters[request])
+        else: #gradebook requested
+            output = csvsql.sqlite3toCSVstring("gradebook.db",request)
+        return output
+
+class upload:
+    def GET(self,item):
+        return render.upload(item)
+
+    def POST(self,item):
+        #issue, maybe some confirmation/preview page is in order.
+        wi = web.input()
+        fstr = wi['upfile']
+        if item == 'qbank':
+            f = open(questionBankLocation,'w')
+            f.write(fstr)
+            f.close()
+            questions.rePopulateBank()
+            return "File uploaded and database updated. Use the back button"
+
+        if item in rosters:
+            db = rosters[item][0]
+            table = rosters[item][1]
+            csvsql.csvOverwrite(db,table,fstr)
+            return "File uploaded and database updated. Use the back button"
+        
+class sandbox:
+    def GET(self):
+        rdr = csvsql.sqlite3TableToIter("control.db","students")
+        return render.tableDisplay(rdr)
     
 #Rock and Roll!
 if __name__ == "__main__":

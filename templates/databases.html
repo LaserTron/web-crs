@@ -1,0 +1,50 @@
+$def with (grades)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Databases</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrab, mathjax, jquery etc.   -->
+    <!--          BEGIN                     -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    
+    <!-- Bootstrab, mathjax, jquery etc.   -->
+    <!--          END                      -->   
+  </head>
+  <body><!-- need the dolar colon thing!-->
+    <div class="container"><h1>Databases</h1></div>
+    <div class="container">
+      <h2>Rosters</h2>
+    </div>
+    <div class="container">
+    <table border="1" style="width:100%">
+      <tr>
+	<td>Students</td> <td><a href="/dbview/students">view</a> </td> <td><a href="/download/students" download="students.csv">download</a></td> <td><a href="/upload/students">upload</a> </td>
+      </tr>
+       <tr>
+	<td>Instructors </td> <td><a href="/dbview/instructors">view</a> </td> <td><a href="/download/instructors" download="instructors.csv">download</a></td> <td><a href="/upload/instructors">upload</a> </td>
+      </tr>
+    </table>
+    </div>
+    <div class="container"><h2>Gradebooks</h2></div>
+    <div class="container"> <table border="1" style="width:100%">
+$for g in grades: 
+     <tr><td>$g</td><td><a href="/dbview/$g">view</a></td> <td><a href="/download/$g" download="$(g).csv">download</a></td> <!--td><a href="/upload/$g">upload</a> </td--></tr>
+</table>
+    </div>
+
+    <div class="container"><h2>Question bank</h2></div>
+    <div class="container">
+    <table border="1" style="width:100%">
+      <tr>
+	<td>Question bank</td><td><a href="/download/qbank" download="question-bank.tex">download</a></td> <td><a href="/upload/qbank">upload</a> </td>
+      </tr>
+    </table>
+    </div>
+  </body>
+</html>

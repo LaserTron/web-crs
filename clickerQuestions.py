@@ -8,7 +8,7 @@
 
 import re
 from string import join
-from questions import *
+import questions as qu
 import web
 render = web.template.render('templates/')
 
@@ -148,7 +148,8 @@ class clkrQuestion:
         return output
         
     def addToDb(self):
-        addQuestion(self.ID, self.tagStr, self.content)
+        #qu.addQuestion(*map(unicode,[self.ID, self.tagStr, self.content]))
+        qu.addQuestion(self.ID, self.tagStr, self.content)
 
     def getAnswers(self):
         return map(sstrip,self.answerStr.split(','))
@@ -187,21 +188,4 @@ class clkrQuestion:
 
     def showEdit(self):
         return "This should show the correct answer and a couple buttons."
-
-def loadBank():
-    output = []
-    qbank = dumpFileToString(banklocation)
-    qus = extractQuestions(qbank)
-    for qblock in qus:
-        output.append(clkrQuestion(qblock))
-    return output
-
-def populateBank():
-    qus = loadBank()
-    for i in qus:
-        i.addToDb()
-
-def rePopulateBank():
-    clearQuestions()
-    populateBank()
 

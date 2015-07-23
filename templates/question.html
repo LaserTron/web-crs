@@ -24,7 +24,7 @@ $def with (body,qnumber,state)
     <script src="/static/control.js"></script>
     <script src="/static/question.js"></script>
     <script type="text/javascript">syncState();</script>
-
+ 
     <!-- Some inline javascript-->
     <script>
       var page="$qnumber";
@@ -43,12 +43,17 @@ $def with (body,qnumber,state)
     $:body
 
     <!-- Add a status div -->
-
+<!--
     <div class="status" id="debug"></div>
     <div class="status" id="message"></div>
      <script>
        document.getElementById("debug").innerHTML=page;
      </script>
-     
+    --> 
+<div class="footer">
+  <div class="container" style="padding:2px">
+    <h4><a href="/logout">log out</a></h4>
+  </div>
+</div>
   </body>
 </html>

@@ -86,3 +86,17 @@ def getTables(db):
     db = getDbObject(db)
     a = db.select('sqlite_master',what="name")
     return map(lambda x: x['name'],a)
+
+def sqlite3TableToIter(db,table):
+    """
+    Takes an sqlite3 table and produces an iterator containing the 
+    rows of the table, for easy printing.
+    """
+    #this method is a bit hacky.
+    db = getDbObject(db)
+    csvstring = sqlite3toCSVstring(db,table)
+    inio = csi.StringIO()
+    inio.write(csvstring)
+    inio.seek(0)
+    reader = csv.reader(inio)
+    return reader

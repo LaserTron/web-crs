@@ -34,10 +34,10 @@ function clickChoice(ans)
 	    var response = ansTrans.responseText;
 	    switch(response){//This updates the response
 	    case "1":
-		ansdiv.style.background="LightGreen";
+		ansdiv.style.background="Yellow";
 		break;
 	    case "0":
-		ansdiv.style.background="#FFCCCC";
+		ansdiv.style.background="White";
 		break;
 	    default:
 		ansdiv.innerHTML=response;

@@ -1,0 +1,13 @@
+$def with (rdr)
+<table border="1">
+<tr>  
+$for i in rdr.next():
+     <th style="padding:2px">$i</th>
+</tr>
+$for j in rdr:
+     <tr>
+     $for k in j:
+          <td style="padding:2px">$k</td>
+     </tr>
+</table>
+<!-- Probably should put padding in a separate css file>

@@ -3,8 +3,13 @@ import sqlite3
 import gradebook 
 import clickerQuestions as cq
 
+print "questions"
 qu = web.database(dbn="sqlite",db="questions.db")
 qu.ctx.db.text_factory=str #erm... I have NO CLUE what this means :-/
+qu.query("PRAGMA journal_mode=off")
+qu.query("PRAGMA synchronous=off")
+
+banklocation = 'questions/questionbank.tex'
 
 def cleanCSL(csl):
     """
@@ -53,6 +58,15 @@ def addQuestion(ID,tgs,qblck):
     if isInTable('questionbank', 'id', ID):
         return False
     else:
+        #########
+        #Need to invoke this block on demand
+        #########
+        qu.ctx.db.text_factory=str #erm... I have NO CLUE what this means :-/
+        qu.query("PRAGMA journal_mode=off")
+        qu.query("PRAGMA synchronous=off")
+        #############
+        #END
+        #############
         qu.insert('questionbank', id=ID, tags=tgs, qblock=qblck)
         return True
 
@@ -61,6 +75,10 @@ def delQuestion(ID):
     qu.delete('questionbank',where=wherestring)
 
 def clearQuestions():
+    """
+    Clears the question bank in the database.
+    """
+    #Issue: this can probably be done in a couple lines
     con = sqlite3.connect('questions.db')
     cur = con.cursor()
     sqlstring ="DROP TABLE questionbank"
@@ -136,3 +154,34 @@ def giveClickerQuestion(session,page):
     qid=qlist[page]
     qblock = getQuestion(qid)
     return cq.clkrQuestion(qblock)
+
+#THESE METHODS TO IMPORT CLICKER BANK
+
+def openFile(filename):
+    f = open(filename,'r')
+    return f
+
+def dumpFileToString(filename):
+    f=openFile(filename)
+    content = f.read()
+    f.close()
+    return content
+
+def loadBank():
+    output = []
+    qbank = dumpFileToString(banklocation)
+    #qbank = unicode(qbank)
+    qus = cq.extractQuestions(qbank)
+    for qblock in qus:
+        output.append(cq.clkrQuestion(qblock))
+    return output
+
+def populateBank():
+    qus = loadBank()
+    for i in qus:
+        i.addToDb()
+
+def rePopulateBank():
+    clearQuestions()
+    populateBank()
+

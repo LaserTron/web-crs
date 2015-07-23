@@ -17,3 +17,13 @@
 .container .text-muted {
   margin: 20px 0;
 }
+
+.footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  /* Set the fixed height of the footer here */
+  height: 5%;
+  background-color: #f5f5f5;
+}
