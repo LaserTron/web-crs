@@ -1,6 +1,6 @@
 import web
 import gradebook
-from hashlib import sha1
+import hashlib
 
 #
 #Requires a DB with a table called 'States' with columns 'state' and 'page'
@@ -8,12 +8,11 @@ from hashlib import sha1
 
 def sha1digest(s):
     salt = "boy this is salty frdew34567uhygfrer6uhgfrtyuhijhbgftrdfg"
-    ho = sha1(s+salt)
+    ho = hashlib.sha1(s+salt)
     return ho.hexdigest()
 
 ctrl = web.database(dbn="sqlite",db="control.db")
 ctrl.ctx.db.text_factory=str #erm... I have NO CLUE what this means :-/
-
 
 def isInTable(table,col,entry):
     wherestring = '{0}=\"{1}\"'.format(col,entry)
@@ -27,6 +26,52 @@ def getEntry(table,col,key,ID):
     wherestring = "{0}=\"{1}\"".format(key,ID)
     bob = ctrl.select(table,where=wherestring,what=col)
     return bob[0][col]
+
+def isStudent(user):
+    return isInTable("students","username",user)
+
+def isInstructor(user):
+    return isInTable("instructors","username",user)
+
+def getPassHash(user):
+    """
+    Returns the hash of the user's password or returns false if 
+    the user doesn't exist.
+    """
+    emp = lambda x: x==None or "" or x.isspace()
+    if isStudent(user):
+        paswd = getEntry("students","password","username",user)
+        if emp(paswd):
+            return None
+        else:
+            return paswd
+    elif isInstructor(user):
+        paswd = getEntry("instructors","password","username",user)
+        if emp(paswd):
+            return None
+        else:
+            return paswd
+    else:
+        return False
+    
+def setPassword(user,paswd):
+    """
+    Stores a hash of the user's password. Returns false if 
+    the user is not found.
+    """
+    passhash = sha1digest(paswd)
+    sqldic={}
+    sqldic['where']="username = \"{0}\"".format(user)
+    sqldic['password']=passhash
+    if isStudent(user):
+        ctrl.update("students",**sqldic) 
+    elif isInstructor(user):
+        ctrl.update("instructors",**sqldic) 
+    else:
+        return False
+
+def validatePassword(user,pashash):
+    return pashash == getPassHash(user)
 
 # def getState(section):
 #     return getEntry(sessions,state,'section',section)
