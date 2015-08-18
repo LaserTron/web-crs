@@ -18,12 +18,13 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * Instructors can instantly see student responses.
 * Supports multiple simultaneous instructors and lecture sessions.
 * Instructor and student rosters can be downloaded and uploaded/updated via .csv files.
+* All users have passwords.
 
 ##Upcoming features:
 * Flexible flow enabling Mazur's Peer Instruction tehcnique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation.
 * A countdown timer.
 * Support for images.
-* https and passwords. (The current version is fundamentally insecure)
+* Encryption, i.e. https.
 * Web-based question composer/editor interface so that the user can compose questions without knowing latex.
 
 ##Required packages (Linux):
