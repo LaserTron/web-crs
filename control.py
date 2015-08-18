@@ -21,7 +21,8 @@ def isInTable(table,col,entry):
 
 def getEntry(table,col,key,ID):
     """
-    returns value of column from corresponding key/ID
+    returns value of column from corresponding key/ID. Returns
+    only one entry.
     """
     wherestring = "{0}=\"{1}\"".format(key,ID)
     bob = ctrl.select(table,where=wherestring,what=col)
@@ -70,6 +71,20 @@ def setPassword(user,paswd):
     else:
         return False
 
+def clearPassword(user):
+    """
+    Deletes the password
+    """
+    sqldic={}
+    sqldic['where']="username = \"{0}\"".format(user)
+    sqldic['password']=None
+    if isStudent(user):
+        ctrl.update("students",**sqldic) 
+    elif isInstructor(user):
+        ctrl.update("instructors",**sqldic) 
+    else:
+        return False
+    
 def validatePassword(user,pashash):
     return pashash == getPassHash(user)
 
@@ -183,6 +198,14 @@ def setInstrSession(instr,session):
     wherestring = "username = \"{0}\"".format(instr)
     sqldic={'where':wherestring,'session':session}
     ctrl.update("instructors",**sqldic)
+
+def getSessionSection(instr):
+    sess = getInstrSession(instr)
+    return getEntry("sections","name","session",sess)
+
+def getSessionStudents(instr):
+    sec = getSessionSection(instr)
+    return getStudentsBySec(sec)
 
 def getSessionPage(session):
     return getEntry("sessions","page","name",session)

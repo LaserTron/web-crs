@@ -50,6 +50,8 @@ urls = (#this delcares which url is activated by which class
     '/dbview/(.+)','dbview',
     '/download/(.+)','download',
     '/upload/(.+)','upload',
+    '/clearPass/','clearPass',
+    '/dropPass/','dropPass',
     '/sandbox','sandbox'
     
 )
@@ -78,11 +80,16 @@ def getPassHash():
         return username
 
 def validateInstructor():
+    """
+    This method verifies that the user is an instructor 
+    by testing the username/password pair. If it's good, return the
+    username. Otherwise log the user out.
+    """
     username = getUsername()
     passhash=getPassHash()
     if control.isInstructor(username) and control.validatePassword(username,passhash):
         print username + " validated"
-        return True
+        return username
     else:
         raise web.seeother('/logout/?msg=unauthorized')
 
@@ -91,10 +98,21 @@ def validateStudent():
     passhash=getPassHash()
     if control.isStudent(username) and control.validatePassword(username,passhash):
         print username + " validated"
-        return True
+        return username
     else:
         raise web.seeother('/logout/?msg=unauthorized')
 
+def validateUser():
+    """
+    Returns the username if the user cookies match the database. 
+    Otherwise logs out the user.
+    """
+    username = getUsername()
+    passhash=getPassHash()
+    if control.validatePassword(username,passhash):
+        return username
+    else:
+        raise web.seeother('/logout/?msg=unauthorized')
     
 def cleanCSL(csl):
     """
@@ -116,7 +134,8 @@ class index:
                 "logout":"Cookies deleted. Logged out",
                 "userNotFound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
-                "clear":"Enter you new password if for first time use or password reset."
+                "clear":"Enter you new password if for first time use or password reset.",
+                "newpass":"Your password has been cleared. Please enter your username and new password."
             }
             return render.login(message[status])
 
@@ -431,6 +450,32 @@ class download:
             output = csvsql.sqlite3toCSVstring("gradebook.db",request)
         return output
 
+class clearPass:
+    def GET(self):
+        """
+        Allows the instructor to delete student's passwords.
+        """
+        username = validateInstructor()
+        stulist = control.getSessionStudents(username)
+        return render.clearPass(stulist)
+
+    def POST(self):
+        username = validateInstructor()
+        stulist = control.getSessionStudents(username)
+        wi = web.input()
+        user = wi["user"]
+        control.clearPassword(user)
+        return render.clearPass(stulist)
+
+class dropPass:
+    def GET(self):
+        """
+        Clears the users password
+        """
+        user = validateUser()
+        control.clearPassword(user)
+        raise web.seeother("/logout/?msg=newpass")
+    
 class upload:
     def GET(self,item):
         validateInstructor()
