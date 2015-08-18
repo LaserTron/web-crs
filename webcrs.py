@@ -41,7 +41,7 @@ urls = (#this delcares which url is activated by which class
     '/compose/' , 'compose',
     '/preview/','preview',
     '/instructor/', 'instructor',
-    '/logout', 'logout',
+    '/logout/', 'logout',
     '/manage/', 'manage',
     '/assign/', 'assign',
     '/sessions/', 'sessions',
@@ -50,6 +50,8 @@ urls = (#this delcares which url is activated by which class
     '/dbview/(.+)','dbview',
     '/download/(.+)','download',
     '/upload/(.+)','upload',
+    '/clearPass/','clearPass',
+    '/dropPass/','dropPass',
     '/sandbox','sandbox'
     
 )
@@ -62,6 +64,7 @@ rosters = { #these are pairs of where the database tables
     "instructors":["control.db","instructors"],
 }
 
+
 def getUsername():
     username=web.cookies().get('clicker-username')
     if username == None:
@@ -69,6 +72,48 @@ def getUsername():
     else:
         return username
 
+def getPassHash():
+    username=web.cookies().get('clicker-passhash')
+    if username == None:
+        return render.login()
+    else:
+        return username
+
+def validateInstructor():
+    """
+    This method verifies that the user is an instructor 
+    by testing the username/password pair. If it's good, return the
+    username. Otherwise log the user out.
+    """
+    username = getUsername()
+    passhash=getPassHash()
+    if control.isInstructor(username) and control.validatePassword(username,passhash):
+        print username + " validated"
+        return username
+    else:
+        raise web.seeother('/logout/?msg=unauthorized')
+
+def validateStudent():
+    username = getUsername()
+    passhash=getPassHash()
+    if control.isStudent(username) and control.validatePassword(username,passhash):
+        print username + " validated"
+        return username
+    else:
+        raise web.seeother('/logout/?msg=unauthorized')
+
+def validateUser():
+    """
+    Returns the username if the user cookies match the database. 
+    Otherwise logs out the user.
+    """
+    username = getUsername()
+    passhash=getPassHash()
+    if control.validatePassword(username,passhash):
+        return username
+    else:
+        raise web.seeother('/logout/?msg=unauthorized')
+    
 def cleanCSL(csl):
     """
     Takes a string representing a comma separated list and removes spaces and trailing colons
@@ -80,21 +125,38 @@ class index:
     def GET(self):
         username=web.cookies().get('clicker-username')
         if username == None:
-            return render.login()
+            wi = web.input()
+            if "msg" in wi:
+                status = wi["msg"]
+            else:
+                status="clear"
+            message = {#This gives a message associated to a status
+                "logout":"Cookies deleted. Logged out",
+                "userNotFound":"Username not found. Are you registered? Did you enter the correct username?",
+                "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
+                "clear":"Enter you new password if for first time use or password reset.",
+                "newpass":"Your password has been cleared. Please enter your username and new password."
+            }
+            return render.login(message[status])
 
         if control.isInTable('instructors','username',username):
             destination = '/instructor/'
         elif control.isInTable('students','username',username):
             destination = '/quiz/{0}'.format(username)
         else:
-            raise web.seeother("/logout")
+            raise web.seeother("/logout/?msg=userNotFound")
             #return username +' not found'#render.login()#TODO add error message!
         raise web.seeother(destination)
             
     def POST(self):
         i = web.input()
         username=i.username
+        password=i['password']
+        passhash = control.sha1digest(password)
+        if control.getPassHash(username) == None:
+            control.setPassword(username,password)
         web.setcookie('clicker-username', username)
+        web.setcookie('clicker-passhash', passhash)
         raise web.seeother("/")
 
 
@@ -104,7 +166,7 @@ class question:
         # Issues: There is a current bug: if a student refreshes
         # the page it no longer shows the state of their selection.
         #####
-        
+        validateStudent()#ensures credentials are okay
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
         state = control.getSessionState(sess)
@@ -143,6 +205,7 @@ class submit:
         The figures out what to pass to the toggleChoice method 
         and returns the entry in the daabase (either 0 or 1).
         """
+        validateStudent()#this is potentially sensitive
         user = getUsername()
         session = control.getStudentSession(user)
         qnumber = control.getSessionPage(session)
@@ -154,12 +217,19 @@ class logout:
     Gets rid of cookie, i.e. logs out.
     """
     def GET(self):
+        wi = web.input()
+        if "msg" in wi:
+            status=wi["msg"]
+        else:
+            status = "logout" 
         web.setcookie('clicker-username','',expires=-1)
-        raise web.seeother("/")
+        
+        raise web.seeother("/?msg="+status)
         #return "Login cookie deleted"
 
 class manage:
     def GET(self):
+        validateInstructor()
         instr = getUsername()
         allsections = control.getSections()
         print allsections
@@ -179,6 +249,7 @@ class manage:
 
     def POST(self):
         #debug:
+        validateInstructor()
         instr = getUsername()
         wi = web.input()
         allsections = control.getSections()
@@ -198,6 +269,7 @@ class manage:
 
 class assign:
     def POST(self):
+        validateInstructor()
         instr = getUsername()
         wi = web.input()
         qid=wi['quiz']
@@ -231,6 +303,7 @@ class assign:
     
 class addQuiz:
     def POST(self):
+        validateInstructor()
         i = web.input()
         newquiz = i['newquiz']
         questions.addQuiz(newquiz)
@@ -238,6 +311,7 @@ class addQuiz:
         
 class preview:
     def POST(self):
+        validateInstructor()
         i = web.input()
         quiz = i['quiz']
         newqlist = i['quizlist']
@@ -250,6 +324,7 @@ class preview:
         
 class compose:#no argument means start a new quiz
     def GET(self):
+        validateInstructor()
         username = getUsername()
         i = web.input()
         if not 'quiz' in i:
@@ -261,6 +336,7 @@ class compose:#no argument means start a new quiz
 #            return render.bootstrap(body)
 
     def POST(self):
+        validateInstructor()
         i=web.input()
         tag = i['tag']
         quiz = i['quiz']
@@ -275,6 +351,7 @@ class compose:#no argument means start a new quiz
 
 class instructor:
     def GET(self):
+        validateInstructor()
         name=web.cookies().get('clicker-username')
         if name == None:
             return render.login()
@@ -285,6 +362,7 @@ class instructor:
 
 class sessions:
     def GET(self):
+        validateInstructor()
         username = getUsername()
         yoursession = str(control.getInstrSession(username))
         yoursections = control.getInstrSections(username)
@@ -299,6 +377,7 @@ class conduct:
     quiz.
     """
     def GET(self,session):
+        validateInstructor()
         username = getUsername()
         control.setInstrSession(username,session)
         page = control.getSessionPage(session)
@@ -309,6 +388,7 @@ class conduct:
         """
         Enables the instructor to control the progress of the quiz
         """
+        validateInstructor()
         username = getUsername()
         sess = control.getInstrSession(username)
         if action == "next":
@@ -344,12 +424,14 @@ class conduct:
 
 class databases:
     def GET(self):
+        validateInstructor()
         grades=csvsql.getTables("gradebook.db")
         grades.remove("sessions") #sessions is not a gradebook 
         return render.databases(grades)
 
 class dbview:
     def GET(self,table):
+        validateInstructor()
         if table in rosters:
             rdr = csvsql.sqlite3TableToIter(*rosters[table])
         else:
@@ -358,6 +440,7 @@ class dbview:
 
 class download:
     def GET(self,request):
+        validateInstructor()
         if request == "qbank":
             f = open(questionBankLocation,'r')
             output = f.read()
@@ -367,12 +450,40 @@ class download:
             output = csvsql.sqlite3toCSVstring("gradebook.db",request)
         return output
 
+class clearPass:
+    def GET(self):
+        """
+        Allows the instructor to delete student's passwords.
+        """
+        username = validateInstructor()
+        stulist = control.getSessionStudents(username)
+        return render.clearPass(stulist)
+
+    def POST(self):
+        username = validateInstructor()
+        stulist = control.getSessionStudents(username)
+        wi = web.input()
+        user = wi["user"]
+        control.clearPassword(user)
+        return render.clearPass(stulist)
+
+class dropPass:
+    def GET(self):
+        """
+        Clears the users password
+        """
+        user = validateUser()
+        control.clearPassword(user)
+        raise web.seeother("/logout/?msg=newpass")
+    
 class upload:
     def GET(self,item):
+        validateInstructor()
         return render.upload(item)
 
     def POST(self,item):
         #issue, maybe some confirmation/preview page is in order.
+        validateInstructor()
         wi = web.input()
         fstr = wi['upfile']
         if item == 'qbank':
@@ -392,6 +503,7 @@ class upload:
         
 class sandbox:
     def GET(self):
+        validateInstructor()
         rdr = csvsql.sqlite3TableToIter("control.db","students")
         return render.tableDisplay(rdr)
     

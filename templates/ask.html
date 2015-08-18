@@ -31,7 +31,6 @@ $def with (body,qnumber)
       <h2>Question $qnumber</h2>
     </div>
     $:body
-
     <div class="container">
       <div class="row" align="center">
 	<form method="post">
@@ -39,6 +38,9 @@ $def with (body,qnumber)
 	  <button formaction="/conduct/scores">See responses</button>
 	  <button formaction="/conduct/next">Next question</button>
 	</form>
+      </div>
+      <div class="row">
+	<a href="/clearPass/">Reset student passwords</a>
       </div>
     </div>
   </body>
