@@ -107,7 +107,18 @@ class index:
     def GET(self):
         username=web.cookies().get('clicker-username')
         if username == None:
-            return render.login()
+            wi = web.input()
+            if "msg" in wi:
+                status = wi["msg"]
+            else:
+                status="clear"
+            message = {#This gives a message associated to a status
+                "logout":"Cookies deleted. Logged out",
+                "userNotFound":"Username not found. Are you registered? Did you enter the correct username?",
+                "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
+                "clear":"Enter you new password if for first time use or password reset."
+            }
+            return render.login(message[status])
 
         if control.isInTable('instructors','username',username):
             destination = '/instructor/'
@@ -187,8 +198,14 @@ class logout:
     Gets rid of cookie, i.e. logs out.
     """
     def GET(self):
+        wi = web.input()
+        if "msg" in wi:
+            status=wi["msg"]
+        else:
+            status = "logout" 
         web.setcookie('clicker-username','',expires=-1)
-        raise web.seeother("/?msg=logout")
+        
+        raise web.seeother("/?msg="+status)
         #return "Login cookie deleted"
 
 class manage:
