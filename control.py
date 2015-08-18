@@ -39,7 +39,7 @@ def getPassHash(user):
     Returns the hash of the user's password or returns false if 
     the user doesn't exist.
     """
-    emp = lambda x: x==None or "" or x.isspace()
+    emp = lambda x: x==None or x=="" or x.isspace()
     if isStudent(user):
         paswd = getEntry("students","password","username",user)
         if emp(paswd):
