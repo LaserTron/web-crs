@@ -6,7 +6,7 @@ $def with (clkrq,tally)
 <div class="container">
   <div class="row">
     <div class="col-xs-12"><!--Question Statement-->
-      $clkrq.getQuestion()
+      $:clkrq.getQuestion()
     </div>
   </div>
 <!--/div-->
@@ -14,7 +14,7 @@ $def with (clkrq,tally)
 <!-- Answer choices-->
 
   <div class="row">
-    <form>
+    <!--form-->
       $for ans in clkrq.getChoiceDict():
            <div class="container"><div class="rounded col-sm-6"
            id="box$ans">
@@ -22,7 +22,10 @@ $def with (clkrq,tally)
 
 
       </div>
-    </form>
+  <div class="row">
+    Total responses: $tally["Total responses"]
+  </div>
+  <!--/form-->
     
   </div>
 </div>

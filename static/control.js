@@ -1,13 +1,11 @@
 function upDate(){
-    var msgbox=document.getElementById("message")
-    switch(state){
-    case "reload":
+    if (state != initstate){
 	history.go(0);
-	msgbox.innerHTML=state;
-	break;
-    default:
-	msgbox.innerHTML=state;
     }
+    
+    var msgbox=document.getElementById("message");
+    msgbox.innerHTML=state;
+    
 }
 
 
@@ -23,7 +21,7 @@ function syncState()
 	{
 	    var response = stateReq.responseText;
 	    state = response;
-	    if (state != "reload"){
+	    if (state == initstate){
 		syncState();
 	    }
 	    upDate();

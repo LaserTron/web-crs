@@ -1,4 +1,4 @@
-$def with (msg)
+$def with (preamble,msg)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,9 +9,7 @@ $def with (msg)
     <!-- <meta name="author" content=""> -->
 
     <title>Clicker Signin</title>
-   <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" type="text/css"
-	  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    $:preamble
     <link href="/static/signin.css" rel="stylesheet">
   </head>
 

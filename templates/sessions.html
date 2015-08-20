@@ -1,4 +1,4 @@
-$def with(yoursession,sessdic)
+$def with(preamble,yoursession,sessdic)
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,17 +9,8 @@ $def with(yoursession,sessdic)
     <!-- <meta name="author" content=""> -->
 
     <title>Current sessions</title>
-    
-
-    <!-- Le Bootstrap -->
-    <link rel="stylesheet" type="text/css"
-	  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <!--link href="/static/signin.css" rel="stylesheet"-->
-    <!-- Finished le Bootstrap-->
-
-    
+    $:preamble
+      
   </head>
 
   <body>

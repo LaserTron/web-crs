@@ -41,7 +41,6 @@ urls = (#this delcares which url is activated by which class
     '/manage/', 'manage',
     '/assign/', 'assign',
     '/sessions/', 'sessions',
-    #'/prog/(.+)','progress',
     '/databases/','databases',
     '/dbview/(.+)','dbview',
     '/download/(.+)','download',
@@ -53,6 +52,8 @@ urls = (#this delcares which url is activated by which class
 )
 
 render = web.template.render('templates/')
+bootpre = render.bootPreamble()
+mathpre = render.bootMathJaxPreamble()
 
 questionBankLocation = cq.banklocation
 rosters = { #these are pairs of where the database tables
@@ -64,16 +65,16 @@ rosters = { #these are pairs of where the database tables
 def getUsername():
     username=web.cookies().get('clicker-username')
     if username == None:
-        return render.login()
+        raise web.seeother("/?msg=notfound")
     else:
         return username
 
 def getPassHash():
-    username=web.cookies().get('clicker-passhash')
-    if username == None:
-        return render.login()
+    passhash=web.cookies().get('clicker-passhash')
+    if passhash == None:
+        raise web.seeother("/?msg=notfound")
     else:
-        return username
+        return passhash
 
 def validateInstructor():
     """
@@ -128,20 +129,20 @@ class index:
                 status="clear"
             message = {#This gives a message associated to a status
                 "logout":"Cookies deleted. Logged out",
-                "userNotFound":"Username not found. Are you registered? Did you enter the correct username?",
+                "notfound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
                 "clear":"Enter your new password if first time use or password reset.",
                 "newpass":"Your password has been cleared. Please enter your username and new password."
             }
-            return render.login(message[status])
+            return render.login(bootpre,message[status])
 
         if control.isInTable('instructors','username',username):
             destination = '/instructor/'
         elif control.isInTable('students','username',username):
             destination = '/quiz/{0}'.format(username)
         else:
-            raise web.seeother("/logout/?msg=userNotFound")
-            #return username +' not found'#render.login()#TODO add error message!
+            raise web.seeother("/logout/?msg=notfound")
+
         raise web.seeother(destination)
             
     def POST(self):
@@ -165,11 +166,24 @@ class question:
         page = control.getSessionPage(sess)
         state = control.getSessionState(sess)
         if state == "finished":
-            return render.studentFinished()
+            return render.studentFinished() 
+        tally = gradebook.tallyAnswers(sess,page)
         clkq = questions.giveClickerQuestion(sess,page)
-        content = render.qTemplate(clkq)
+
+        #STATE SWITCH
+        if state == "init":
+            content = render.notReady()
+        elif state == "open":
+            content = clkq.getRendered()
+        elif state == "closed":
+            content = render.closed()
+        elif state == "showResp":
+            content = clkq.showResponses(tally)
+        elif state == "showAns":
+            content = clkq.showCorrect()
+
         selections = gradebook.getStudentSelections(student,sess,page)#makes sure student is shown responses in case of reload
-        return render.question(content,page+1,state,selections)#added +1 to page for niceness
+        return render.question(mathpre,content,page+1,state,selections)#added +1 to page for niceness
         
 class Comet:
     def GET(self):
@@ -187,7 +201,7 @@ class Comet:
         
         for i in range(cycles):
             curstate = control.getStudentState(username)
-            if not state ==  curstate:
+            if not state == curstate:
                 return curstate
             else:
                 sleep(interval)
@@ -196,16 +210,18 @@ class Comet:
 class submit:
     def GET(self,choice):
         """
-        The user sends the answer choice as a url. 
+        The student sends the answer choice as a url. 
         The figures out what to pass to the toggleChoice method 
         and returns the entry in the daabase (either 0 or 1).
         """
-        validateStudent()#this is potentially sensitive
-        user = getUsername()
+        user = validateStudent()#this is potentially sensitive
         session = control.getStudentSession(user)
         qnumber = control.getSessionPage(session)
-        return gradebook.toggleChoice(user,session,qnumber,choice)
-    
+        if control.getStudentState(user) == "open":
+            return gradebook.toggleChoice(user,session,qnumber,choice)
+        else:
+            return "-1"
+        
 
 class logout:
     """
@@ -240,7 +256,7 @@ class manage:
         butt = form.Button(name="button", type="submit", value="Select sections")
         formguts.append(butt)
         f = form.Form(*formguts) #asterisk passes entries as arguments
-        return render.manage(f)
+        return render.manage(bootpre,f)
 
     def POST(self):
         #debug:
@@ -291,7 +307,7 @@ class assign:
             butt = form.Button(name="Assign "+qid, type="submit", value="Assign quiz")
         formguts.append(butt)
         f = form.Form(*formguts)
-        return render.assign(qid,f) #to be completed
+        return render.assign(bootpre,qid,f) #to be completed
 
     def GET(self):
         return "bar"
@@ -314,7 +330,7 @@ class preview:
         questions.setQuizQuestions(quiz,newqlist)
         hits = questions.getQblocks(quiz)
         hits = map(cq.clkrQuestion,hits)
-        return render.compose(quiz,hits,newqlist)
+        return render.compose(mathpre,quiz,hits,newqlist)
 #        return render.bootstrap(prev)
         
 class compose:#no argument means start a new quiz
@@ -327,7 +343,7 @@ class compose:#no argument means start a new quiz
             return render.quizChoser(username,qlist)
         else:
             quizlist = questions.getQuizQuestions(i['quiz'])
-            return render.compose(i['quiz'],[],quizlist)
+            return render.compose(mathpre,i['quiz'],[],quizlist)
 #            return render.bootstrap(body)
 
     def POST(self):
@@ -341,30 +357,25 @@ class compose:#no argument means start a new quiz
         quizlist = questions.getQuizQuestions(i['quiz'])
         hits = questions.getWithTag(tag)
         qresults = map(cq.clkrQuestion,hits)
-        return render.compose(quiz,qresults,quizlist)
+        return render.compose(mathpre,quiz,qresults,quizlist)
 
 
 class instructor:
     def GET(self):
-        validateInstructor()
-        name=web.cookies().get('clicker-username')
-        if name == None:
-            return render.login()
-        if control.isInTable('instructors','username',name):
-            return render.instructor(name)
-        else:
-            raise web.seeother("/")
+        name = validateInstructor()
+        preamble = render.bootPreamble()
+        return render.instructor(preamble,name)
+        
 
 class sessions:
     def GET(self):
-        validateInstructor()
-        username = getUsername()
+        username = validateInstructor()
         yoursession = str(control.getInstrSession(username))
         yoursections = control.getInstrSections(username)
         sessdic = {}
         for i in yoursections:
             sessdic[i] = str(control.getAssignedQuiz(i))
-        return render.sessions(yoursession,sessdic)
+        return render.sessions(bootpre,yoursession,sessdic)
 
 class conduct:
     """
@@ -372,57 +383,60 @@ class conduct:
     quiz.
     """
     def GET(self,session):
-        validateInstructor()
-        username = getUsername()
+        username = validateInstructor()
         control.setInstrSession(username,session)
         page = control.getSessionPage(session)
         clkq = questions.giveClickerQuestion(session,page)
-        return render.ask(clkq.renderInstructor(),page+1)
+        state = control.getSessionState(session)
+        return render.ask(mathpre,clkq.renderInstructor(),page+1,state)
 
     def POST(self,action):
         """
         Enables the instructor to control the progress of the quiz
         """
-        validateInstructor()
-        username = getUsername()
+        username = validateInstructor()
         sess = control.getInstrSession(username)
+        page = control.getSessionPage(sess)
+        clkq = questions.giveClickerQuestion(sess,page)
+        state = control.getSessionState(sess)
+        
         if action == "next":
             another = control.advanceSession(sess)
             if another:
                 raise web.seeother("/conduct/"+sess)
             else:
                 return "quiz finished"
+
+        elif action == "answers":
+            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+
         elif action =="scores":
-            page = control.getSessionPage(sess)
             tally = gradebook.tallyAnswers(sess,page)
-            clkq = questions.giveClickerQuestion(sess,page)
-            return render.ask(clkq.showResponses(tally),page+1)
-        return action
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+
+        elif (action == "closed") or (action == "open"):
+            control.setSessionState(sess,action)
+            raise web.seeother("/conduct/"+sess)
+
+        elif action == "showAns":
+            control.setSessionState(sess,action)
+            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+
+        elif action == "showResp":
+            control.setSessionState(sess,action)
+            tally = gradebook.tallyAnswers(sess,page)
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+        
+        return action #for debugging
     
-# class progress:
-#     """
-#     Enables the instructor to control the progress of the quiz
-#     """
-#     def GET(self,action):
-#         username = getUsername()
-#         sess = control.getInstrSession(username)
-#         if action == "next":
-#             another = control.advanceSession(sess)
-#             if another:
-#                 raise web.seeother("/conduct/"+sess)
-#             else:
-#                 return "quiz finished"
-#         elif action =="scores":
-#             page = control.getSessionPage(sess)
-#             tally = gradebook.tallyAnswers(sess,page)
-#         return action
+
 
 class databases:
     def GET(self):
         validateInstructor()
         grades=csvsql.getTables("gradebook.db")
         grades.remove("sessions") #sessions is not a gradebook 
-        return render.databases(grades)
+        return render.databases(bootpre,grades)
 
 class dbview:
     def GET(self,table):
@@ -452,7 +466,7 @@ class clearPass:
         """
         username = validateInstructor()
         stulist = control.getSessionStudents(username)
-        return render.clearPass(stulist)
+        return render.clearPass(bootpre,stulist)
 
     def POST(self):
         username = validateInstructor()
@@ -460,7 +474,7 @@ class clearPass:
         wi = web.input()
         user = wi["user"]
         control.clearPassword(user)
-        return render.clearPass(stulist)
+        return render.clearPass(bootpre,stulist)
 
 class dropPass:
     def GET(self):
@@ -474,7 +488,7 @@ class dropPass:
 class upload:
     def GET(self,item):
         validateInstructor()
-        return render.upload(item)
+        return render.upload(bootpre,item)
 
     def POST(self,item):
         #issue, maybe some confirmation/preview page is in order.
@@ -499,7 +513,7 @@ class upload:
 class uploadImg:
     def GET(self):
         validateInstructor()
-        return render.uploadImg(None)
+        return render.uploadImg(bootpre,None)
 
     def POST(self):
         validateInstructor()
@@ -510,14 +524,9 @@ class uploadImg:
         f = open(target,'w+')
         f.write(fstr)
         f.close
-        return render.uploadImg(fname)
+        return render.uploadImg(bootpre,fname)
     
-# class sandbox:
-#     def GET(self):
-#         validateInstructor()
-#         rdr = csvsql.sqlite3TableToIter("control.db","students")
-#         return render.tableDisplay(rdr)
-    
+
 #Rock and Roll!
 if __name__ == "__main__":
     app = web.application(urls, globals())

@@ -88,13 +88,6 @@ def clearPassword(user):
 def validatePassword(user,pashash):
     return pashash == getPassHash(user)
 
-# def getState(section):
-#     return getEntry(sessions,state,'section',section)
-
-def setState(page,st):#UPDATE
-    wherestring = "page=\"{0}\"".format(page)
-    ctrl.update("States", where=wherestring, state=st)
-    
 def addInstructor(user):
     user=user.strip()
     res = isInTable('instructors','username',user)
@@ -189,7 +182,7 @@ def sessionAdd(sesname):
     if isInTable("sessions","name",sesname):
         return None
 
-    ctrl.insert("sessions",name = sesname, page=0, state="closed")
+    ctrl.insert("sessions",name = sesname, page=0, state="init")
     
 def getInstrSession(instr):
     return getEntry("instructors","session","username",instr)
@@ -212,6 +205,13 @@ def getSessionPage(session):
 
 def getSessionState(session):
     return getEntry("sessions","state","name",session)
+
+def setSessionState(session,state):
+    sqldic={
+        "where" : "name = \"{0}\"".format(session),
+        "state": state
+    }        
+    ctrl.update("sessions",**sqldic)
 
 def getStudentSession(user):
     sec = getEntry("students","section","username",user)
@@ -247,5 +247,10 @@ def advanceSession(session):
         ctrl.update("sessions",**sqldict)
         return False
     else:
-        updateEntry("sessions","page","name",session,curpage+1)
+        sqldict={
+            "where" : "name = \"{0}\"".format(session),
+            "page" : curpage+1,
+            "state" : "init"
+        }
+        ctrl.update("sessions",**sqldict)
         return True

@@ -1,9 +1,10 @@
 #
-#will require a question database 
-#This module contains the clkrQuestion class, which interprets qblocks,
-#and renders itself as html
+# will require a question database 
+# This module contains the clkrQuestion class, which interprets qblocks,
+# and renders itself as html
 #
-#Also contains methods for getting tex files into the database
+# Also contains methods for parsing tex files and inserting
+# questions into a database
 #
 
 import re

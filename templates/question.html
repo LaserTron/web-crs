@@ -1,4 +1,4 @@
-$def with (body,qnumber,state,sels)
+$def with (mathjax,body,qnumber,state,sels)
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,29 +6,19 @@ $def with (body,qnumber,state,sels)
     <title>Question $qnumber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrab, mathjax, jquery etc.   -->
-    <!--          BEGIN                     -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax:
-    {inlineMath: [['$$','$$'],
-    ['$$$$','$$$$'],['\[','\]']]}}); </script><!-- dollar signs doubled because of Templetor-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <!-- Bootstrab, mathjax, jquery etc.   -->
-    <!--          END                      -->   
-
+    $:mathjax
+    
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
     <script src="/static/control.js"></script>
     <script src="/static/question.js"></script>
-    <script type="text/javascript">syncState();</script>
+    
  
     <!-- Some inline javascript-->
-    <script>
+    <script> <!-- Set up sync -->
       var page="$qnumber";
       var state="$state";
+      var initstate="$state";
       syncState();
     </script>
     <!-- End of inline javascript-->
@@ -38,18 +28,19 @@ $def with (body,qnumber,state,sels)
   <body><!-- need the dolar colon thing!-->
     <!-- TODO add a function that sets everything to zero-->
     <div class="container">
-      <h2>Question $qnumber</h2>
+      <h2>Question</h2>
     </div>
     $:body
 
     <!-- Add a status div -->
-<!--
+
     <div class="status" id="debug"></div>
     <div class="status" id="message"></div>
      <script>
        document.getElementById("debug").innerHTML=page;
+       document.getElementById("message").innerHTML=state+initstate;       
      </script>
-    --> 
+     
 <script><!-- Synchronize with recorded answers -->
   $for i in sels:
        highlightAnsDiv("$i");

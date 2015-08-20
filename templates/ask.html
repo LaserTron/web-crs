@@ -1,4 +1,4 @@
-$def with (body,qnumber)
+$def with (mathjax,body,qnumber,state)
 <!DOCTYPE html>
 <html>
   <head>
@@ -6,24 +6,17 @@ $def with (body,qnumber)
     <title>Question $qnumber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Bootstrab, mathjax, jquery etc.   -->
-    <!--          BEGIN                     -->
-    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script type="text/x-mathjax-config"> MathJax.Hub.Config({tex2jax:
-    {inlineMath: [['$$','$$'],
-    ['$$$$','$$$$'],['\[','\]']]}}); </script><!-- dollar signs doubled because of Templetor-->
-    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-    <!-- Bootstrab, mathjax, jquery etc.   -->
-    <!--          END                      -->   
+    $:mathjax
 
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
-    <script src="/static/control.js"></script>
     <script src="/static/ask.js"></script>
-    <script type="text/javascript">syncState();</script>
+
+    <script> 
+      var state="$state";
+    </script>
+
+    
   </head>
   
   <body><!-- need the dolar colon thing!-->
@@ -35,13 +28,27 @@ $def with (body,qnumber)
       <div class="row" align="center">
 	<form method="post">
 	  <!-- button formaction="/conduct/close">Close</button-->
-	  <button formaction="/conduct/scores">See responses</button>
-	  <button formaction="/conduct/next">Next question</button>
+	  $if state == "open":
+	       <button formaction="/conduct/scores">See responses</button>
+	       <button formaction="/conduct/answers">See correct</button>
+	       <button formaction="/conduct/closed">Close</button>
+	       
+	  $elif state == "init":
+	       <button formaction="/conduct/open"><h2>Open</h2></button>
+
+	  $else:
+	       <button formaction="/conduct/scores">See responses</button>
+	       <button formaction="/conduct/answers">See correct</button>
+	       <button formaction="/conduct/showResp">Show Responses</button>
+	       <button formaction="/conduct/showAns">Show Correct</button>
+
+	       <button formaction="/conduct/next">Next question</button>
 	</form>
       </div>
       <div class="row">
 	<a href="/clearPass/">Reset student passwords</a>
       </div>
     </div>
+    $state
   </body>
 </html>
