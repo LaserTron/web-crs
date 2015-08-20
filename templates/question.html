@@ -1,4 +1,4 @@
-$def with (body,qnumber,state)
+$def with (body,qnumber,state,sels)
 <!DOCTYPE html>
 <html>
   <head>
@@ -50,6 +50,11 @@ $def with (body,qnumber,state)
        document.getElementById("debug").innerHTML=page;
      </script>
     --> 
+<script><!-- Synchronize with recorded answers -->
+  $for i in sels:
+       highlightAnsDiv("$i");
+</script>
+
 <div class="footer">
   <div class="container" style="padding:0px">
     <strong> <a href="/logout/">log out</a> /

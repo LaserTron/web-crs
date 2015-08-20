@@ -23,11 +23,7 @@ import csvtosqlite3 as csvsql
 #Issues:
 #############
 #
-# Some sort of validation/password authentication function
-# is needed to prevent impersonation attacks.
 #
-# As currently implemented an unauthorized user can obtain
-# sensitive information from the download method.
 #
 #############
 
@@ -134,7 +130,7 @@ class index:
                 "logout":"Cookies deleted. Logged out",
                 "userNotFound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
-                "clear":"Enter you new password if for first time use or password reset.",
+                "clear":"Enter your new password if first time use or password reset.",
                 "newpass":"Your password has been cleared. Please enter your username and new password."
             }
             return render.login(message[status])
@@ -162,11 +158,9 @@ class index:
 
 class question:
     def GET(self,username):
-        #####
-        # Issues: There is a current bug: if a student refreshes
-        # the page it no longer shows the state of their selection.
-        #####
-        validateStudent()#ensures credentials are okay
+        student = validateStudent()#ensures credentials are okay
+        if not student==username:
+            raise web.seeother("/logout/?msg=unauthorized")
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
         state = control.getSessionState(sess)
@@ -174,7 +168,8 @@ class question:
             return render.studentFinished()
         clkq = questions.giveClickerQuestion(sess,page)
         content = render.qTemplate(clkq)
-        return render.question(content,page+1,state)#added +1 to page for niceness
+        selections = gradebook.getStudentSelections(student,sess,page)#makes sure student is shown responses in case of reload
+        return render.question(content,page+1,state,selections)#added +1 to page for niceness
         
 class Comet:
     def GET(self):

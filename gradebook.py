@@ -122,7 +122,7 @@ def makeSession(sname,qid):
     for clq in qlist:
         basename = "Q"+str(qcounter)
         totcol = basename+"total"
-        addIntCol(sname, basename)
+        addFloatCol(sname, basename)#new check if works
         addFloatCol(sname,totcol)
         cd = clq.getChoiceDict()
         for i in cd:
@@ -139,9 +139,20 @@ def getQuizFromSession(session):
 def getSessionQuestions(session):
     return getEntry('sessions','questions','name',session)
 
-#def getStudentResponse(student,session):
-    
-
+def getStudentSelections(student,session,qnumber):
+    quizID = getEntry('sessions', 'quiz', 'name', session)
+    qblock = questions.getQblocks(quizID)[qnumber]
+    clkq = cq.clkrQuestion(qblock)
+    basename = "Q"+str(qnumber)
+    choices = clkq.getChoices()
+    selections = []
+    sqldic = {'where':"username = \"{0}\"".format(student)}
+    row = gdbk.select(session,**sqldic)[0]
+    for c in choices:
+        if row[basename+c] == 1:
+            selections.append(c)
+    return selections
+            
 def toggleChoice(student,session,qnumber,choice):
     """
     Changes the value of a student choice and updates the 
@@ -189,6 +200,9 @@ def toggleChoice(student,session,qnumber,choice):
     return curEntry 
 
 def tallyAnswers(session,qnumber):
+    """
+    Counts the responses to a question and returns a dictionary
+    """
     quizID = getEntry('sessions', 'quiz', 'name', session)
     qblock = questions.getQblocks(quizID)[qnumber]
     clkq = cq.clkrQuestion(qblock)
