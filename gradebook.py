@@ -140,6 +140,9 @@ def getSessionQuestions(session):
     return getEntry('sessions','questions','name',session)
 
 def getStudentSelections(student,session,qnumber):
+    """
+    Returns a list of answerids of the student's selection
+    """
     quizID = getEntry('sessions', 'quiz', 'name', session)
     qblock = questions.getQblocks(quizID)[qnumber]
     clkq = cq.clkrQuestion(qblock)
