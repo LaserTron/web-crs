@@ -1,0 +1,38 @@
+$def with (fname)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Upload image</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrab, jquery etc.   -->
+    <!--          BEGIN                     -->
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- Bootstrab, jquery etc.   -->
+    <!--          END                      -->   
+  </head>
+  
+  <body><!-- need the dolar colon thing!-->
+    <div class="container"><h1>Image upload</h1>
+      Select the image you want to upload and specify the filename you
+      want it to have. <strong>Warning:</strong> You must supply a
+      filename and this will overwrite existing images.
+    </div>
+    <div class="container">
+     <form method="POST" enctype="multipart/form-data" action="/uploadImg/">
+       <input type="file" name="upfile"> Filename: <input type="text" name="fname">
+       <br/>
+       <input type="submit">
+     </form>
+    </div>
+    <div class="container">
+      $if not fname == None:
+           Here is the image you just uploaded. You can upload another:
+           <img src="/static/images/$fname">
+    </div>
+  </body>
+</html>
