@@ -22,15 +22,14 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * Image support.
 
 ##Upcoming features:
-* Flexible flow enabling Mazur's Peer Instruction tehcnique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation.
+* Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation.
 * A countdown timer.
 * Encryption, i.e. https.
 * Web-based question composer/editor interface so that the user can compose questions without knowing latex.
 
-##Required packages (Linux):
+##Required packages:
 * `python2`
 * `sqlite3`
-* `sqlitestudio` (recommended)
 
 ##Required python modules:
 * `web.py` (installable via python 2 `easy_install`)

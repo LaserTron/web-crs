@@ -5,6 +5,7 @@ from time import sleep
 from web import form
 import questions
 import clickerQuestions as cq
+import pureClick as pq
 import csvtosqlite3 as csvsql
 
 ############
@@ -47,7 +48,9 @@ urls = (#this delcares which url is activated by which class
     '/upload/(.+)','upload',
     '/clearPass/','clearPass',
     '/dropPass/','dropPass',
+    '/edit/','edit',
     '/uploadImg/','uploadImg'
+    
     
 )
 
@@ -525,8 +528,39 @@ class uploadImg:
         f.write(fstr)
         f.close
         return render.uploadImg(bootpre,fname)
-    
 
+class edit:    
+    def GET(self):
+        ####
+        #Require ID if none create
+        ####
+        bob = questions.getQuestion("NT1")
+        clq = cq.clkrQuestion(bob)
+        pclq = pq.Question()
+        pclq.eatClq(clq)
+        return render.edit(pclq)
+
+    def POST(self):
+        wi = web.input()
+        pclq = pq.Question()
+        pclq.setID(wi['ID'])
+        pclq.eatTagStr(wi['tags'])
+        pclq.setStatement(wi['stmt'])
+        #make more general to correspond to ID
+        bob = questions.getQuestion("NT1")
+        clq = cq.clkrQuestion(bob)
+        ########
+        correct = []
+        for i in clq.getChoices():
+            pclq.choices[i]=wi[i]
+            if i+"-checked" in wi:
+                correct.append(i)
+        pclq.setAnswers(correct)
+        #return str(clq.getAnswers())
+        content = pclq.barfClq().showCorrect()
+        return render.question(mathpre,content,0,"open",[])
+        #return render.bootstrap("prev",wi["ch1"]) 
+    
 #Rock and Roll!
 if __name__ == "__main__":
     app = web.application(urls, globals())

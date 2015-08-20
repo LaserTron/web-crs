@@ -1,0 +1,54 @@
+$def with (pclq)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Edit</title>
+
+
+  </head>
+
+  <body>
+    
+    <form method="post" id="editform">
+      <table>
+	<tr><td><strong>ID:</strong></td><td>
+	  <textarea name="ID" cols="65" rows="1">$:pclq.getID()</textarea>	
+	</td></tr>
+	<tr>
+	  <td><strong>Tags:</strong></td>
+	  <td>
+	    <textarea name="tags" cols="65" rows="1">$:pclq.getTagStr()</textarea>
+	  </td>
+	</tr>
+	<tr><td colspan="2"><strong>Statement</strong></td></tr>
+	<tr>
+	  <td colspan="2"><textarea name="stmt" type="entry" rows="8" cols="70">$:pclq.getStatement()</textarea> </td>
+	</tr>
+      </table>
+
+      <table>
+	<tr>
+	  <th> Answer Id</th><th>Answer</th><th>Correct</th>
+	</tr>
+	  $for i in pclq.getChoices():
+	       $:pclq.writeChoiceRow(i)
+      </table>
+      <input type="submit" formaction="/edit/?fubar=fubar">
+    </form>
+
+    <h2>Code Snippets for images</h2>
+    <table>
+      <tr><th>Code for an inline image</th>
+	<td>
+	  <textarea cols="60"><img src='/static/images/rainbow-wolf.jpg'></textarea>
+	</td>
+      </tr>
+      <tr><th>Code for a centered figure</th><td>
+	  <textarea cols="60"><div style='text-align:center'><img src='/static/images/rainbow-wolf.jpg'></div></textarea></td></tr>
+    </table>
+    
+  </body>
+</html>
