@@ -35,7 +35,7 @@ $def with (mathjax,quizID,qresults,qlist)
 $for q in qresults:
      <div class="container">
      <h2>$q.ID</h2>
-     $:q.getRendered()
+     $:q.showCorrect()
      </div>
   </body>
 </html>
