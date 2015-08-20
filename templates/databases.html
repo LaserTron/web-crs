@@ -3,7 +3,7 @@ $def with (grades)
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Databases</title>
+    <title>Data</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrab, mathjax, jquery etc.   -->
@@ -17,7 +17,7 @@ $def with (grades)
     <!--          END                      -->   
   </head>
   <body><!-- need the dolar colon thing!-->
-    <div class="container"><h1>Databases</h1></div>
+    <div class="container"><h1>Data</h1></div>
     <div class="container">
       <h2>Rosters</h2>
     </div>
@@ -26,25 +26,30 @@ $def with (grades)
       <tr>
 	<td>Students</td> <td><a href="/dbview/students">view</a> </td> <td><a href="/download/students" download="students.csv">download</a></td> <td><a href="/upload/students">upload</a> </td>
       </tr>
-       <tr>
+      <tr>
 	<td>Instructors </td> <td><a href="/dbview/instructors">view</a> </td> <td><a href="/download/instructors" download="instructors.csv">download</a></td> <td><a href="/upload/instructors">upload</a> </td>
       </tr>
     </table>
     </div>
     <div class="container"><h2>Gradebooks</h2></div>
     <div class="container"> <table border="1" style="width:100%">
-$for g in grades: 
-     <tr><td>$g</td><td><a href="/dbview/$g">view</a></td> <td><a href="/download/$g" download="$(g).csv">download</a></td> <!--td><a href="/upload/$g">upload</a> </td--></tr>
-</table>
+	$for g in grades: 
+	     <tr><td>$g</td><td><a href="/dbview/$g">view</a></td> <td><a href="/download/$g" download="$(g).csv">download</a></td> <!--td><a href="/upload/$g">upload</a> </td--></tr>
+      </table>
     </div>
-
+    
     <div class="container"><h2>Question bank</h2></div>
     <div class="container">
-    <table border="1" style="width:100%">
-      <tr>
-	<td>Question bank</td><td><a href="/download/qbank" download="question-bank.tex">download</a></td> <td><a href="/upload/qbank">upload</a> </td>
-      </tr>
+      <table border="1" style="width:100%">
+	<tr>
+	  <td>Question bank</td><td><a href="/download/qbank" download="question-bank.tex">download</a></td> <td><a href="/upload/qbank">upload</a> </td>
+	</tr>
+	<tr>
+	  <td>Images</td><td><a href="/static/images/">view uploaded images</a></td><td><a href="/uploadImg/">upload images</a>
+	</tr>
     </table>
     </div>
+    
+    
   </body>
 </html>

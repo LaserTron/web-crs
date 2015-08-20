@@ -45,14 +45,14 @@ urls = (#this delcares which url is activated by which class
     '/manage/', 'manage',
     '/assign/', 'assign',
     '/sessions/', 'sessions',
-    '/prog/(.+)','progress',
+    #'/prog/(.+)','progress',
     '/databases/','databases',
     '/dbview/(.+)','dbview',
     '/download/(.+)','download',
     '/upload/(.+)','upload',
     '/clearPass/','clearPass',
     '/dropPass/','dropPass',
-    '/sandbox','sandbox'
+    '/uploadImg/','uploadImg'
     
 )
 
@@ -269,8 +269,8 @@ class manage:
 
 class assign:
     def POST(self):
-        validateInstructor()
-        instr = getUsername()
+        instr=validateInstructor()
+        #instr = getUsername()
         wi = web.input()
         qid=wi['quiz']
         yoursections = control.getInstrSections(instr)
@@ -500,12 +500,28 @@ class upload:
             if item == "students":
                 control.populateSections()
             return "File uploaded and database updated. Use the back button"
-        
-class sandbox:
+
+class uploadImg:
     def GET(self):
         validateInstructor()
-        rdr = csvsql.sqlite3TableToIter("control.db","students")
-        return render.tableDisplay(rdr)
+        return render.uploadImg(None)
+
+    def POST(self):
+        validateInstructor()
+        wi= web.input()
+        fstr = wi['upfile']
+        fname = wi['fname']
+        target = "static/images/{0}".format(fname)
+        f = open(target,'w+')
+        f.write(fstr)
+        f.close
+        return render.uploadImg(fname)
+    
+# class sandbox:
+#     def GET(self):
+#         validateInstructor()
+#         rdr = csvsql.sqlite3TableToIter("control.db","students")
+#         return render.tableDisplay(rdr)
     
 #Rock and Roll!
 if __name__ == "__main__":

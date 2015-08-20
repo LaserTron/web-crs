@@ -25,16 +25,15 @@ $def with (quizID,qresults,qlist)
    <div class="container">
     
      <form method="POST">
-        <h2>$quizID <button type="submit" formaction="/assign/?quiz=$quizID">Assign</button></h2>
+        <h3>$quizID <button type="submit" formaction="/assign/?quiz=$quizID">Assign to one of your sections</button></h3>
        <table>
 	 <tr>
 	   <td>Search for tag:</td><td> <input type="text" id="reqTag" name="tag"></td><td><button type="submit"
 						formaction="/compose/?quiz=$quizID">Search </button></td>
 	 </tr>
 	 <tr>
-	   <td>Current questions:</td><td><input type="text", id="quizlist", name="quizlist", value="$qlist"></td><td><button type="submit"
-					 formaction="/preview/?quiz=$quizID">
-	       Preview</button></td></tr>
+	   <td>Question list:</td><td><input type="text", id="quizlist", name="quizlist", value="$qlist"></td><td>(enter ids separated by commas)</td><tr><td><button type="submit"
+																				      formaction="/preview/?quiz=$quizID">Preview</button></td><td></td><td></td></tr>
 	  <tr>
 	    
        </table>
@@ -44,8 +43,9 @@ $def with (quizID,qresults,qlist)
 
 
 $for q in qresults:
+     <div class="container">
      <h2>$q.ID</h2>
      $:q.getRendered()
-
+     </div>
   </body>
 </html>

@@ -23,6 +23,11 @@ gdbk.ctx.db.text_factory=str #erm... I have NO CLUE what this means :-/
 gdbk.query("PRAGMA journal_mode=off")
 gdbk.query("PRAGMA synchronous=off")
 
+def remove_prefix(text, prefix):
+    if text.startswith(prefix):
+        return text[len(prefix):]
+    return text #or whatever
+
 def getEntry(table,col,key,ID):
     """
     Returns value of column from corresponding key/ID.
@@ -79,17 +84,19 @@ def addStudent(student,session):
         gdbk.insert(session, username = student)
     
 def setAnswer(student,choice,value):#This is a bit of a hack...
-    con = sqlite3.connect('gradebook.db')
-    cur = con.cursor()
+    #con = sqlite3.connect('gradebook.db')
+    #cur = con.cursor()
     value=str(value)#in case saved as int
     section = control.getUserSection(student)
     sqlstring = "UPDATE {0} SET {1}=\'{2}\' WHERE username=\'{3}\'".format(section,choice,value,student) #this can be fixed with a keyword dict
     # print section
     #print sqlstring
-    cur.execute(sqlstring)
-    con.commit()
-    con.close()
+    #cur.execute(sqlstring)
+    #con.commit()
+    #con.close()
+    gdbk.query(sqlstring)
 
+    
 def makeSession(sname,qid):
     """makes a table called sname+RESPONSES.Tables have a username
     column, a column corresponding to a question to record a grade
@@ -103,12 +110,13 @@ def makeSession(sname,qid):
 
     qblocks = questions.getQblocks(qid)
     qlist = map(cq.clkrQuestion,qblocks)        
-    con = sqlite3.connect('gradebook.db')
-    cur = con.cursor()
+    #con = sqlite3.connect('gradebook.db')
+    #cur = con.cursor()
     sqlstring = "CREATE TABLE {0}(username TEXT)".format(sname)
-    cur.execute(sqlstring)
-    con.commit()
-    con.close()
+    #cur.execute(sqlstring)
+    #con.commit()
+    #con.close()
+    gdbk.query(sqlstring)
 
     qcounter = 0
     for clq in qlist:
@@ -130,6 +138,9 @@ def getQuizFromSession(session):
 
 def getSessionQuestions(session):
     return getEntry('sessions','questions','name',session)
+
+#def getStudentResponse(student,session):
+    
 
 def toggleChoice(student,session,qnumber,choice):
     """

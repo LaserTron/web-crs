@@ -34,7 +34,8 @@ def dumpFileToString(filename):
     f.close()
     return content
 
-def noComments(q):#removes latex comments
+def noComments(q):
+    "removes latex comments"
     lines = q.split('\n')
     pat = re.compile('[^\\\\]%.*')
     output = []
@@ -42,7 +43,8 @@ def noComments(q):#removes latex comments
         output.append(pat.sub('',l))
     return join(output,'\n')
 
-def getEnvironments(en,s):#extacts question blocks from a .tex file
+def getEnvironments(en,s):
+    "Extacts question blocks from a .tex file"
     restring = '\\\\begin\\{{{0}\\}}[\\d\\D]*?\\\\end\\{{{0}\\}}'.format(en)
     pat = re.compile(restring)
     return pat.findall(s)
@@ -56,9 +58,30 @@ def getBraced(s):
     pat = re.compile(restring)
     return pat.findall(s)
     
-def deBrace(s):#removes enclosing braces
+def deBrace(s):
+    "removes enclosing braces"
     return s.strip("{}")
 
+def fixGraphics(bk):
+    """
+    Takes a qblock and replaces latex code for images with html code.
+    """
+    restring = '\\\\includegraphics.*?\\{.*?\\}'
+    pat = re.compile(restring)
+    latexImgLines = pat.findall(bk)#all images
+    popout = lambda x: deBrace(getBraced(x)[0])
+    mkimgline = lambda x: "<div class=\"container\"style=\"text-align:center\"><img src=\"/static/images/{0}\"></div>".format(x)#use css for image
+    htmlize = lambda x:mkimgline(popout(x))
+    convDic = {}
+    for i in latexImgLines:
+        convDic[i]=htmlize(i)
+    output = bk
+    for i in convDic:
+        output = output.replace(i,convDic[i])
+    output = output.replace("\\begin{center}","")
+    output = output.replace("\\end{center}","")
+    return output    
+    
 def getId(q):
     inter = getBraced(q)[1]
     return deBrace(inter)
@@ -126,7 +149,7 @@ class clkrQuestion:
 
     def __init__(self,qblock):
 
-        self.content = noComments(qblock)
+        self.content = fixGraphics(noComments(qblock))#fixgraphics for graphics.
         self.ID = getId(qblock)
         self.tagStr = getTags(qblock)
         self.qstmt = getQStatement(qblock)
