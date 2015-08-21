@@ -36,7 +36,7 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * `web.py` (installable via python 2 `easy_install`)
 
 ##How to get it running:
-Download the directory, ensure the required packages and python 2 modules are installed, cd into the directory  and type: `python2 webcrs.py`
+Download the directory, ensure the required packages and python 2 modules are installed, cd into the directory  and type: `python2 webcrs.py`. You can also add an optional port as an argment e.g. `python2 webcrs.py 1234`, for port 80 you'll need privileges.
 
 Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar. To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. 
 
