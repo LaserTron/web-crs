@@ -22,7 +22,7 @@ function syncState()
 	    var response = stateReq.responseText;
 	    state = response;
 	    if (state == initstate){
-		syncState();
+		syncState();/* This is what makes the client-side loop*/
 	    }
 	    upDate();
 	}

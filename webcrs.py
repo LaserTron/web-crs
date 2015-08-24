@@ -190,7 +190,13 @@ class question:
         
 class Comet:
     def GET(self):
-        #Take an argument and return a new state. If the state is old then don't return anything. The client also has to loop to request a new state.
+        """
+        The purpose of this method is to keep a variable called
+        state synchronized in real time bewtween the  client and 
+        what is recorded on the database. See the file 
+        /static/control.js for the client-side code that goes 
+        with this.
+        """
         username = getUsername()
         wi = web.input()
         state=wi.state
