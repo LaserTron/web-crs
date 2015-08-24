@@ -340,6 +340,7 @@ class assemble:#no argument means start a new quiz
     def GET(self):
         validateInstructor()
         username = getUsername()
+        #return username
         i = web.input()
         if not 'quiz' in i:
             qlist = questions.getQuizzes()
@@ -389,9 +390,10 @@ class conduct:
         username = validateInstructor()
         control.setInstrSession(username,session)
         page = control.getSessionPage(session)
+        length = control.getQuizLength(session)
         clkq = questions.giveClickerQuestion(session,page)
         state = control.getSessionState(session)
-        return render.ask(mathpre,clkq.renderInstructor(),page+1,state)
+        return render.ask(mathpre,clkq.renderInstructor(),page+1,length,state)
 
     def POST(self,action):
         """
@@ -400,6 +402,7 @@ class conduct:
         username = validateInstructor()
         sess = control.getInstrSession(username)
         page = control.getSessionPage(sess)
+        length = control.getQuizLength(sess)
         clkq = questions.giveClickerQuestion(sess,page)
         state = control.getSessionState(sess)
         
@@ -408,14 +411,14 @@ class conduct:
             if another:
                 raise web.seeother("/conduct/"+sess)
             else:
-                return "quiz finished"
+                return "<a href=\"/\">quiz finished </a>"
 
         elif action == "answers":
-            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
         elif action =="scores":
             tally = gradebook.tallyAnswers(sess,page)
-            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
 
         elif (action == "closed") or (action == "open"):
             control.setSessionState(sess,action)
@@ -423,12 +426,12 @@ class conduct:
 
         elif action == "showAns":
             control.setSessionState(sess,action)
-            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+            return render.ask(mathpre,clkq.showCorrect(),page+1,legth,state)
 
         elif action == "showResp":
             control.setSessionState(sess,action)
             tally = gradebook.tallyAnswers(sess,page)
-            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
         
         return action #for debugging
     
@@ -448,7 +451,7 @@ class dbview:
             rdr = csvsql.sqlite3TableToIter(*rosters[table])
         else:
             rdr = csvsql.sqlite3TableToIter("gradebook.db",table)
-        return render.bootstrap(table,render.tableDisplay(rdr))
+        return render.bootstrap(bootpre,table,render.tableDisplay(rdr))
 
 class download:
     def GET(self,request):

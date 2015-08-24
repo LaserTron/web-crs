@@ -1,9 +1,9 @@
-$def with (mathjax,body,qnumber,state)
+$def with (mathjax,body,qnumber,length,state)
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Question $qnumber</title>
+    <title>Question $qnumber of $length</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     $:mathjax
@@ -21,7 +21,7 @@ $def with (mathjax,body,qnumber,state)
   
   <body><!-- need the dolar colon thing!-->
     <div class="container">
-      <h2>Question $qnumber</h2>
+      <h2>Question $qnumber of $length</h2>
     </div>
     $:body
     <div class="container">
@@ -35,6 +35,7 @@ $def with (mathjax,body,qnumber,state)
 	       
 	  $elif state == "init":
 	       <button formaction="/conduct/open"><h2>Open</h2></button>
+	       <button formaction="/conduct/next">Skip</button>
 
 	  $else:
 	       <button formaction="/conduct/scores">See responses</button>

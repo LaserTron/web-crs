@@ -110,12 +110,7 @@ def makeSession(sname,qid):
 
     qblocks = questions.getQblocks(qid)
     qlist = map(cq.clkrQuestion,qblocks)        
-    #con = sqlite3.connect('gradebook.db')
-    #cur = con.cursor()
     sqlstring = "CREATE TABLE {0}(username TEXT)".format(sname)
-    #cur.execute(sqlstring)
-    #con.commit()
-    #con.close()
     gdbk.query(sqlstring)
 
     qcounter = 0
