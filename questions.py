@@ -2,6 +2,7 @@ import web
 import sqlite3
 import gradebook 
 import clickerQuestions as cq
+import time
 
 print "questions"
 qu = web.database(dbn="sqlite",db="questions.db")
@@ -55,8 +56,13 @@ def getQuestion(ID):
         return None
     
 def addQuestion(ID,tgs,qblck):
+    """
+    Inserts a question with the given ID and returns 1 if there 
+    is no question with that id. If there is already a question with 
+    that id return 0.
+    """
     if isInTable('questionbank', 'id', ID):
-        return False
+        return 0
     else:
         #########
         #Need to invoke this block on demand
@@ -68,8 +74,27 @@ def addQuestion(ID,tgs,qblck):
         #END
         #############
         qu.insert('questionbank', id=ID, tags=tgs, qblock=qblck)
-        return True
+        return 1
 
+def updateQuestion(ID,tgs,qblck):
+    """
+    Rewrites the question with a given tag and qblock.
+    """
+    if isInTable('questionbank','id',ID):
+        sqldic = {
+            "ID":ID+"-"+str(time.time()),
+            "qblock":qblck
+        }
+        qu.insert("old",**sqldic)
+        sqldic={
+            "where":"ID=\"{0}\"".format(ID),
+            "tags":tgs,
+            "qblock":qblck
+        }
+        qu.update("questionbank",**sqldic)
+    else:
+        addQuestion(ID,tgs,qblck)
+        
 def delQuestion(ID):
     wherestring="id=\"{0}\"".format(ID)
     qu.delete('questionbank',where=wherestring)
@@ -78,28 +103,22 @@ def clearQuestions():
     """
     Clears the question bank in the database.
     """
-    #Issue: this can probably be done in a couple lines
-    con = sqlite3.connect('questions.db')
-    cur = con.cursor()
     sqlstring ="DROP TABLE questionbank"
-    cur.execute(sqlstring)
+    qu.query(sqlstring)
     sqlstring = "CREATE TABLE questionbank(id TEXT, tags TEXT, qblock TEXT)"
-    cur.execute(sqlstring)
-    con.commit()
-    con.close()
+    qu.query(sqlstring)
 
 def mkQuestions():
     """
     Creates a new blank questionbank table in questions.db
     """
-    con = sqlite3.connect('questions.db')
-    cur = con.cursor()
     sqlstring = "CREATE TABLE questionbank(id TEXT, tags TEXT, qblock TEXT)"
-    cur.execute(sqlstring)
-    con.commit()
-    con.close()
+    qu.query(sqlstring)
 
 def addQuiz(ID):
+    """
+    Adds an empty quiz if none exists in DB
+    """
     if isInTable('quizzes','id',ID):
         return False
     else:
@@ -155,33 +174,68 @@ def giveClickerQuestion(session,page):
     qblock = getQuestion(qid)
     return cq.clkrQuestion(qblock)
 
-#THESE METHODS TO IMPORT CLICKER BANK
+#THESE METHODS TO IMPORT/EXPORT CLICKER BANK
 
-def openFile(filename):
-    f = open(filename,'r')
-    return f
+# def openFile(filename):
+#     f = open(filename,'r')
+#     return f
+#
+# def dumpFileToString(filename):
+#     f=openFile(filename)
+#     content = f.read()
+#     f.close()
+#     return content 
+#
+# def loadBank():
+#     output = []
+#     qbank = dumpFileToString(banklocation)
+#     qus = cq.extractQuestions(qbank)
+#     for qblock in qus:
+#         output.append(cq.clkrQuestion(qblock))
+#     return output
 
-def dumpFileToString(filename):
-    f=openFile(filename)
-    content = f.read()
-    f.close()
-    return content
+# def populateBank():
+#     qus = loadBank()
+#     for i in qus:
+#         i.addToDb()
+        
+# def rePopulateBank():
+#     clearQuestions()
+#     populateBank()
 
-def loadBank():
-    output = []
-    qbank = dumpFileToString(banklocation)
-    #qbank = unicode(qbank)
-    qus = cq.extractQuestions(qbank)
-    for qblock in qus:
-        output.append(cq.clkrQuestion(qblock))
-    return output
+def updateBank(uplstr):
+    """
+    Takes a string representing a LaTex question bank, and adds 
+    quizzes whose IDs are not in the questionbank.    
+    """
+    qus = cq.extractQuestions(uplstr)
+    clkrs = map(cq.clkrQuestion,qus)
+    for i in clkrs: i.addToDb()    
+    
+def questionsToTexStr():
+    "Produces a string that can be written to a tex file"
+    qus = qu.select("questionbank")
+    qblocks = []
+    for i in qus: qblocks.append(i["qblock"])
+    pre = """\\documentclass{article}
+\\usepackage{geometry,amssymb,graphicx,enumerate}
+    
+\\newenvironment{clkrQuestion}[2]{
+\\begin{minipage}{\\textwidth}
+\\vskip .4in
+\\textbf{Id:}\\texttt{#1}\\\\ 
+\\textbf{Tags:}{~#2}\\\\
+}
+{\\end{minipage}}
 
-def populateBank():
-    qus = loadBank()
-    for i in qus:
-        i.addToDb()
+\\newcommand{\\answer}[1]{\\textbf{Answer: }\\ref{#1}}
+\\newcommand{\\explanation}[1]{#1}
+\\newcommand{\\probstmt}[1]{#1}
+\\begin{document}
+"""
 
-def rePopulateBank():
-    clearQuestions()
-    populateBank()
+    middle = "\n".join(qblocks)
 
+    post="\n \\end{document}"
+
+    return pre+middle+post

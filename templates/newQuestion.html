@@ -1,0 +1,18 @@
+$def with (exists)
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>New quiz question</title>
+  </head>
+
+  <body>
+    $if not exists == None:
+         <p>The ID $exists exists. Please select another. </p>
+    <p>
+      Please enter the ID of the new question:
+      <form method="post">
+	<input name="ID"><input type="submit">
+      </form>
+    </p>
+  </body>
+

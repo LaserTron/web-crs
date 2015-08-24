@@ -7,7 +7,7 @@ $def with (mathjax,quizID,qresults,qlist)
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     $:mathjax
-    <link href="/static/compose.css" rel="stylesheet">
+    <link href="/static/assemble.css" rel="stylesheet">
 
   </head>
   <body>
@@ -19,7 +19,7 @@ $def with (mathjax,quizID,qresults,qlist)
        <table>
 	 <tr>
 	   <td>Search for tag:</td><td> <input type="text" id="reqTag" name="tag"></td><td><button type="submit"
-						formaction="/compose/?quiz=$quizID">Search </button></td>
+						formaction="/assemble/?quiz=$quizID">Search </button></td>
 	 </tr>
 	 <tr>
 	   <td>Question list:</td><td><input type="text", id="quizlist", name="quizlist", value="$qlist"></td><td>(enter ids separated by commas)</td><tr><td><button type="submit"
@@ -27,14 +27,17 @@ $def with (mathjax,quizID,qresults,qlist)
 	  <tr>
 	    
        </table>
-    </form>
+     </form>
+     <p>
+       Hint: For peer instruction enter the same question twice.
+     </p>
    </div>
  </topper>
 
 
 $for q in qresults:
      <div class="container">
-     <h2>$q.ID</h2>
+     <h3>$q.ID <a href="/edit/?ID=$q.ID">Edit</a></h3>
      $:q.showCorrect()
      </div>
   </body>

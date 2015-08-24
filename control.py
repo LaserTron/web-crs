@@ -1,6 +1,7 @@
 import web
 import gradebook
 import hashlib
+import time
 
 #
 #Requires a DB with a table called 'States' with columns 'state' and 'page'
@@ -53,7 +54,7 @@ def getPassHash(user):
         else:
             return paswd
     else:
-        return False
+        return False    
     
 def setPassword(user,paswd):
     """
@@ -254,3 +255,24 @@ def advanceSession(session):
         }
         ctrl.update("sessions",**sqldict)
         return True
+
+def setUltimatum(instr,duration):
+    """
+    An ultimatum for timers.
+    """
+    sess = getInstrSession(instr)
+    now = time.time()
+    then = now+duration+1
+    sqldic={
+        "where":"name = \"{0}\"".format(sess),
+        "ultimatum":then,
+        "state":"ultimatum",
+    }
+    ctrl.update("sessions",**sqldic)
+
+def giveTimeLeft(user):
+    if isInstructor(user):
+        sess = getInstrSession(user)
+    else:
+        sess = getStudentSession(user)
+    return None

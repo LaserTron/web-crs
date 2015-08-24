@@ -26,13 +26,15 @@ class Question:
     A more abstract Question class, useful for constructing from form
     data.
     """
+    #choices should have keys not involving the ID, but only letters.
     def __init__(self):
         self.ID = ""
         self.tags = []
         self.statement = ""
         self.choices = {}
         self.correct = []
-
+        self.explanation = ""
+        
     def getID(self):
         return self.ID
 
@@ -63,8 +65,16 @@ class Question:
         ell = chr(l)
         self.choices[self.ID+ell]=""
 
+    def rmChoice(self):
+        "Delete last answer choice"
+        choices = self.choices.keys()
+        choices.sort()
+        lastkey = choices.pop()
+        self.choices.pop(lastkey)
+        if lastkey in self.correct: self.correct.remove(lastkey)
+        
     def setChoice(self,ch,content):
-        seld.choices[ch]="content"
+        self.choices[ch]="content"
 
     def setAnswers(self,li):
         self.correct=li
@@ -80,15 +90,15 @@ class Question:
         return row.format(ans,self.choices[ans],checked)
             
     def writeQblock(self):
-        template = """
-        \\begin{{clkrQuestion}}{{{0}}}{{{1}}}
-        {2}
-        \\begin{{enumerate}}[A.]
-        {3}
-        \\end{{enumerate}}
-        \\answer{{{4}}}
-        \\end{{clkrQuestion}}
-        """
+        template = """\\begin{{clkrQuestion}}{{{0}}}{{{1}}}
+{2}
+\\begin{{enumerate}}[A.]
+{3}
+\\end{{enumerate}}
+\\answer{{{4}}}
+\\explanation{{{5}}}
+\\end{{clkrQuestion}}
+"""
 
         tagstr = ",".join(self.tags)
 
@@ -100,7 +110,7 @@ class Question:
             choicestr += "\\item\\label{{{0}}}{1}\r\n".format(i,self.choices[i])
         ansstr = ",".join(self.correct)
             
-        return template.format(self.ID,tagstr,self.statement,choicestr,ansstr)
+        return template.format(self.ID,tagstr,self.statement,choicestr,ansstr,self.explanation)
 
     def eatClq(self,clq):
         self.ID = clq.ID
@@ -108,7 +118,8 @@ class Question:
         self.statement = clq.qstmt
         self.choices = clq.getChoiceDict()
         self.correct = clq.getAnswers()
-
+        self.explanation = clq.explStr
+        
     def barfClq(self):
         "produces a clickerquestion, not very elegantly though"
         return cq.clkrQuestion(self.writeQblock())

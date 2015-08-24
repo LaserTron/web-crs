@@ -1,6 +1,7 @@
 import web
 import control
 import gradebook
+import time
 from time import sleep
 from web import form
 import questions
@@ -35,7 +36,7 @@ urls = (#this delcares which url is activated by which class
     '/conduct/(.+)','conduct',
     '/submit/(.+)', 'submit',
     '/addQuiz/', 'addQuiz',
-    '/compose/' , 'compose',
+    '/assemble/' , 'assemble',
     '/preview/','preview',
     '/instructor/', 'instructor',
     '/logout/', 'logout',
@@ -49,9 +50,8 @@ urls = (#this delcares which url is activated by which class
     '/clearPass/','clearPass',
     '/dropPass/','dropPass',
     '/edit/','edit',
+    '/new/','new',
     '/uploadImg/','uploadImg'
-    
-    
 )
 
 render = web.template.render('templates/')
@@ -321,7 +321,7 @@ class addQuiz:
         i = web.input()
         newquiz = i['newquiz']
         questions.addQuiz(newquiz)
-        raise web.seeother('/compose/')
+        raise web.seeother('/assemble/')
         
 class preview:
     def POST(self):
@@ -333,10 +333,10 @@ class preview:
         questions.setQuizQuestions(quiz,newqlist)
         hits = questions.getQblocks(quiz)
         hits = map(cq.clkrQuestion,hits)
-        return render.compose(mathpre,quiz,hits,newqlist)
+        return render.assemble(mathpre,quiz,hits,newqlist)
 #        return render.bootstrap(prev)
         
-class compose:#no argument means start a new quiz
+class assemble:#no argument means start a new quiz
     def GET(self):
         validateInstructor()
         username = getUsername()
@@ -346,7 +346,7 @@ class compose:#no argument means start a new quiz
             return render.quizChoser(username,qlist)
         else:
             quizlist = questions.getQuizQuestions(i['quiz'])
-            return render.compose(mathpre,i['quiz'],[],quizlist)
+            return render.assemble(mathpre,i['quiz'],[],quizlist)
 #            return render.bootstrap(body)
 
     def POST(self):
@@ -360,7 +360,7 @@ class compose:#no argument means start a new quiz
         quizlist = questions.getQuizQuestions(i['quiz'])
         hits = questions.getWithTag(tag)
         qresults = map(cq.clkrQuestion,hits)
-        return render.compose(mathpre,quiz,qresults,quizlist)
+        return render.assemble(mathpre,quiz,qresults,quizlist)
 
 
 class instructor:
@@ -454,8 +454,7 @@ class download:
     def GET(self,request):
         validateInstructor()
         if request == "qbank":
-            f = open(questionBankLocation,'r')
-            output = f.read()
+            output = questions.questionsToTexStr()
         elif request in rosters:
             output = csvsql.sqlite3toCSVstring(*rosters[request])
         else: #gradebook requested
@@ -502,7 +501,7 @@ class upload:
             f = open(questionBankLocation,'w')
             f.write(fstr)
             f.close()
-            questions.rePopulateBank()
+            questions.updateBank(fstr)
             return "File uploaded and database updated. Use the back button"
 
         if item in rosters:
@@ -529,38 +528,78 @@ class uploadImg:
         f.close
         return render.uploadImg(bootpre,fname)
 
+class new:
+    def GET(self):
+        validateInstructor()
+        return render.newQuestion(None)
+
+    def POST(self):
+        validateInstructor()
+        ID = web.input()['ID']
+        if questions.isInTable("questionbank","ID",ID):
+            return render.newQuestion(ID)
+        else:
+            raise web.seeother("/edit/?ID={0}".format(ID))
+        
 class edit:    
     def GET(self):
         ####
         #Require ID if none create
         ####
-        bob = questions.getQuestion("NT1")
-        clq = cq.clkrQuestion(bob)
-        pclq = pq.Question()
-        pclq.eatClq(clq)
+        username = validateInstructor()
+        wi = web.input()
+        if not "ID" in wi:
+            pclq = pq.Question()
+        else:
+            bob = questions.getQuestion(wi["ID"])
+            pclq = pq.Question()
+            if not bob == None:#set it to new clicker question
+                clq = cq.clkrQuestion(bob)
+                pclq.eatClq(clq)
+            pclq.setID(wi["ID"])
         return render.edit(pclq)
 
     def POST(self):
         wi = web.input()
         pclq = pq.Question()
-        pclq.setID(wi['ID'])
+        action = wi['action']
+        ID = wi['ID']
+        pclq.setID(ID)
         pclq.eatTagStr(wi['tags'])
         pclq.setStatement(wi['stmt'])
-        #make more general to correspond to ID
-        bob = questions.getQuestion("NT1")
-        clq = cq.clkrQuestion(bob)
-        ########
+        #print wi.keys()
+
+        keyz = wi.keys()
+        subchoices = []
+        for i in keyz:
+            if i[:len(i)-1]==ID: subchoices.append(i)
+        # bob = questions.getQuestion(ID)
+        # clq = cq.clkrQuestion(bob)
         correct = []
-        for i in clq.getChoices():
+        for i in subchoices:
             pclq.choices[i]=wi[i]
             if i+"-checked" in wi:
                 correct.append(i)
         pclq.setAnswers(correct)
-        #return str(clq.getAnswers())
-        content = pclq.barfClq().showCorrect()
-        return render.question(mathpre,content,0,"open",[])
-        #return render.bootstrap("prev",wi["ch1"]) 
-    
+        
+        
+        if action == "addchoice":
+            pclq.addChoice()
+            questions.updateQuestion(ID,wi['tags'],pclq.writeQblock())
+            raise web.seeother("/edit/?ID={0}".format(ID))
+        elif action == "remove":
+            pclq.rmChoice()
+            questions.updateQuestion(ID,wi['tags'],pclq.writeQblock())
+            raise web.seeother("/edit/?ID={0}".format(ID))
+        elif action == "save":
+            questions.updateQuestion(ID,wi['tags'],pclq.writeQblock())
+            raise web.seeother("/edit/?ID={0}".format(ID))
+        elif action == "preview":
+            content = pclq.barfClq().showCorrect()
+            return render.question(mathpre,content,0,"open",[])
+        else:
+            raise web.seeother("/")
+            
 #Rock and Roll!
 if __name__ == "__main__":
     app = web.application(urls, globals())
