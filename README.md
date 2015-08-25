@@ -20,12 +20,12 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * Instructor and student rosters can be downloaded and uploaded/updated via .csv files.
 * All users have passwords.
 * Image support.
+* Live coutdown timer.
+* Webased question composer/editor interface so that the user can compose questions conveniently in html + mathjax.
 
 ##Upcoming features:
-* Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation.
-* A countdown timer.
+* Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation. (Note this can me spoofed, by asking questions twice in a row, there is an option to skip a question before showing it to students.)
 * Encryption, i.e. https.
-* Web-based question composer/editor interface so that the user can compose questions without knowing latex.
 
 ##Required packages:
 * `python2`
@@ -35,11 +35,13 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * `web.py` (installable via python 2 `easy_install`)
 
 ##How to get it running:
-Download the directory, ensure the required packages and python 2 modules are installed, cd into the directory  and type: `python2 webcrs.py`
+Download the directory, ensure the required packages and python 2 modules are installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges.
 
-Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar. To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. 
+Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar. To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. By default the usernames are unset.
 
-Go to the manage database page and download the question bank. With any latex knowledge you should figure out how to compose your own question. Using the upload link you can overwrite the old questionbank with your own questions. Similarly you can also overwrite the instructor and student rosters with your own.
+Student and instructor rosters can be modified by uploading .csv files in the databases page.
+
+Go to the manage database page and download the question bank. With any latex knowledge you should figure out how to compose your own question. Using the upload link you can update the old questionbank with your own questions. To clear it you will have to edit the database `questions.db` directly.
 
 ##Which technologies are used?
 * HTML 5
@@ -52,4 +54,4 @@ Go to the manage database page and download the question bank. With any latex kn
 ##Apologies
 I am an amateur programmer and started this project knowing only some python. I learned everything else as I was writing this program, consequently some bits may be a bit sloppy and some refactoring is definitely in order. To get rid of certain things like old gradebooks or student sections the databases may have to be edited directly.
 
-Updated: July 27
+Updated: August 25 2015

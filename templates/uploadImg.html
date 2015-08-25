@@ -9,17 +9,17 @@ $def with (bootstrap,fname)
   </head>
   
   <body><!-- need the dolar colon thing!-->
-    <div class="container"><h1>Image upload</h1>
-      Select the image you want to upload and specify the filename you
-      want it to have. <strong>Warning:</strong> You must supply a
-      filename and this will overwrite existing images.
+    <div class="container">
+      Select the image you want to upload.
     </div>
     <div class="container">
      <form method="POST" enctype="multipart/form-data" action="/uploadImg/">
-       <input type="file" name="upfile"> Filename: <input type="text" name="fname">
+       <input type="file" name="upfile"> Filename on server: <input type="text" name="fname">
        <br/>
-       <input type="submit">
+       <button type="submit">Upload</button>
      </form>
+     <strong>Warning:</strong> This can overwrite existing images.
+     
     </div>
     <div class="container">
       $if not fname == None:

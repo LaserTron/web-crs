@@ -30,24 +30,31 @@ $def with (mathjax,body,qnumber,total,state)
     $:body
     <div class="container">
       <div class="row" align="center">
-	<form method="post">
-	  <!-- button formaction="/conduct/close">Close</button-->
-	  $if state == "open":
-	       <button formaction="/conduct/scores">See responses</button>
+
+	  
+	  $if state == "open" or state =="ultimatum":
+               <form method="post">
+               <button formaction="/conduct/scores">See responses</button>
 	       <button formaction="/conduct/answers">See correct</button>
 	       <button formaction="/conduct/closed">Close</button>
+	       <br>
+	       </form>
+	       <button onclick="setTimer('60')">60 second timer</button>
+	       <button onclick="setTimer('30')">30 second timer</button>
 	       
 	  $elif state == "init":
+               <form method="post">
 	       <button formaction="/conduct/open"><h2>Open</h2></button>
-
+	       </form>
 	  $else:
+	       <form method="post">
 	       <button formaction="/conduct/scores">See responses</button>
 	       <button formaction="/conduct/answers">See correct</button>
 	       <button formaction="/conduct/showResp">Show Responses</button>
 	       <button formaction="/conduct/showAns">Show Correct</button>
 
 	       <button formaction="/conduct/next">Next question</button>
-	</form>
+	       </form>
       </div>
       <div class="row">
 	<a href="/clearPass/">Reset student passwords</a>

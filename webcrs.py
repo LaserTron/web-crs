@@ -51,6 +51,7 @@ urls = (#this delcares which url is activated by which class
     '/dropPass/','dropPass',
     '/edit/','edit',
     '/new/','new',
+    '/setTimer/','setTimer',
     '/viewQuestion/','viewQuestion',
     '/uploadImg/','uploadImg'
 )
@@ -349,12 +350,22 @@ class preview:
         hits = questions.getQblocks(quiz)
         hits = map(cq.clkrQuestion,hits)
         return render.assemble(mathpre,quiz,hits,newqlist)
-#        return render.bootstrap(prev)
+
 
 class viewQuestion:
     def GET(self):
         wi = web.input()
-        return str(wi)
+        ID=wi['ID']
+        #return ID
+        ID = str(ID)
+        qblk = questions.getQuestion(ID)
+        if qblk == None:
+            return "Question not found. Did you save yet?"
+        clq = cq.clkrQuestion(qblk)
+        content = clq.showCorrect()
+        pre = str(mathpre)+"\n<link href=\"/static/question.css\" rel=\"stylesheet\">"
+        return render.bootstrap(pre,"Preview",content)
+
 
 class assemble:#no argument means start a new quiz
     def GET(self):
@@ -367,7 +378,7 @@ class assemble:#no argument means start a new quiz
         else:
             quizlist = questions.getQuizQuestions(i['quiz'])
             return render.assemble(mathpre,i['quiz'],[],quizlist)
-#            return render.bootstrap(body)
+
 
     def POST(self):
         validateInstructor()
@@ -470,7 +481,7 @@ class dbview:
             rdr = csvsql.sqlite3TableToIter(*rosters[table])
         else:
             rdr = csvsql.sqlite3TableToIter("gradebook.db",table)
-        return render.bootstrap(table,render.tableDisplay(rdr))
+        return render.bootstrap(bootpre,table,render.tableDisplay(rdr))
 
 class download:
     def GET(self,request):
@@ -548,7 +559,7 @@ class uploadImg:
         f = open(target,'w+')
         f.write(fstr)
         f.close
-        return render.uploadImg(bootpre,fname)
+        return render.upImgSuccess(bootpre,fname)
 
 class new:
     def GET(self):
@@ -595,8 +606,6 @@ class edit:
         subchoices = []
         for i in keyz:
             if i[:len(i)-1]==ID: subchoices.append(i)
-        # bob = questions.getQuestion(ID)
-        # clq = cq.clkrQuestion(bob)
         correct = []
         for i in subchoices:
             pclq.choices[i]=wi[i]
@@ -616,12 +625,18 @@ class edit:
         elif action == "save":
             questions.updateQuestion(ID,wi['tags'],pclq.writeQblock())
             raise web.seeother("/edit/?ID={0}".format(ID))
-        elif action == "preview":
-            content = pclq.barfClq().showCorrect()
-            return render.question(mathpre,content,0,"open",[])
+        # elif action == "preview":
+        #     content = pclq.barfClq().showCorrect()
+        #     return render.question(mathpre,content,0,"open",[])
         else:
             raise web.seeother("/")
-            
+
+class setTimer:
+    def GET(self):
+        username = validateInstructor()
+        t=web.input()['time']
+        control.setUltimatum('username',int(t))
+        
 #Rock and Roll!
 if __name__ == "__main__":
     app = web.application(urls, globals())

@@ -5,7 +5,7 @@ $def with (pclq)
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Edit</title>
+    <title>Edit $pclq.getID()</title>
 
     <script src="/static/edit.js"></script>
   </head>
@@ -46,12 +46,12 @@ $def with (pclq)
       not save)</button>
       <br>
     </form>
-    <form method="GET">
-      <button type="submit" formaction="/uploadImg/">Upload
-	Image</button>
-    </form>
-    <button onclick="imgUpload()">Test Image</button>
-    <button onclick="preview('$:pclq.getID()')">Preview</button>  
+    <!-- <form method="GET"> -->
+    <!--   <button type="submit" formaction="/uploadImg/">Upload -->
+    <!-- 	Image</button> -->
+    <!-- </form> -->
+    <button onclick="imgUpload()">Upload Image</button>
+    <button onclick="preview('$:pclq.getID()')">Preview question</button>  
     <div id="multibox">
     </div>
       
