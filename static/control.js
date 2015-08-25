@@ -1,7 +1,7 @@
 function upDate(){
     if (!isNaN(state)){/*Works if true*/
 	var msgbox=document.getElementById("message");
-	msg = "Time left:"+state+" seconds";
+	msg = "<strong>Time left:"+state+" seconds</strong>";
 	msgbox.innerHTML=msg;
     }
     else if (state != initstate && isNaN(state)){

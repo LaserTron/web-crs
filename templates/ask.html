@@ -32,7 +32,7 @@ $def with (mathjax,body,qnumber,length,state)
     $:body
     <div class="container">
       <div class="row" align="center">
-
+	<h3>
 	  
 	  $if state == "open" or state =="ultimatum":
                <form method="get">
@@ -46,7 +46,7 @@ $def with (mathjax,body,qnumber,length,state)
 	       
 	  $elif state == "init":
                <form method="get">
-	       <button type="submit" name="action" value="open"><h2>Open</h2></button>
+	       <button type="submit" name="action" value="open">Open</button>
 	       <button type="submit" name="action" value="next">Skip</button>
 	       </form>
 	  $else:
@@ -58,6 +58,7 @@ $def with (mathjax,body,qnumber,length,state)
 
 	       <button type="submit" name="action" value="next">Next question</button>
 	       </form>
+	</h3>
       </div>
       <div class="row">
 	<a href="/clearPass/">Reset student passwords</a>

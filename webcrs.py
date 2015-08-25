@@ -178,17 +178,25 @@ class question:
         #STATE SWITCH
         if state == "init":
             content = render.notReady()
+            title = "Not ready"
         elif state == "open" or state =="ultimatum":
+            title="Question"
             content = clkq.getRendered()
         elif state == "closed":
-            content = render.closed()
+            title = "Question closed"
+            content = clkq.getRendered()
         elif state == "showResp":
+            title = "Class responses"
             content = clkq.showResponses(tally)
         elif state == "showAns":
+            title = "Correct answer"
             content = clkq.showCorrect()
 
         selections = gradebook.getStudentSelections(student,sess,page)#makes sure student is shown responses in case of reload
-        return render.question(mathpre,content,page+1,state,selections)#added +1 to page for niceness
+        if state == "closed":
+            return render.questionClosed(mathpre,title,content,page+1,state,selections)
+        else:
+            return render.question(mathpre,title,content,page+1,state,selections)
         
 class Comet:
     def GET(self):
