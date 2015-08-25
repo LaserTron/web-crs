@@ -33,7 +33,7 @@ urls = (#this delcares which url is activated by which class
     '/', 'index',
     '/comet/', 'Comet',
     '/quiz/(.+)','question',
-    '/conduct/(.+)','conduct',
+    '/conduct/','conduct',
     '/submit/(.+)', 'submit',
     '/addQuiz/', 'addQuiz',
     '/assemble/' , 'assemble',
@@ -214,7 +214,7 @@ class Comet:
             return "reload"
 
         if state.isdigit() and systate == "ultimatum":#ultimatum timer is on
-            sleep(interval)
+            sleep(2*interval)
             return control.giveTimeLeft(username)
         
         for i in range(cycles):#checks every second for changes
@@ -424,37 +424,47 @@ class conduct:
     Displays the page that the instructor uses to conduct the
     quiz.
     """
-    def GET(self,session):
+    def GET(self):
         username = validateInstructor()
-        control.setInstrSession(username,session)
+        wi = web.input()
+        #return str(wi)
+        action = wi['action']
+        if action == "setsession":
+            sess = wi['session']
+            control.setInstrSession(username,sess)
+        session = control.getUserSession(username)
+        sess=session #lazyness
         page = control.getSessionPage(session)
         length = control.getQuizLength(session)
         clkq = questions.giveClickerQuestion(session,page)
         state = control.getSessionState(session)
-        print "GET STATE:"+state #debug
-        return render.ask(mathpre,clkq.renderInstructor(),page+1,length,state)
+        print str(wi) #debug
 
-    def POST(self,action):
-        """
-        Enables the instructor to control the progress of the quiz.
-        Note: an unnatural clause was added to the showAns and showResp
-        actions. It seems to fix an automatic state change bug.
-        """
-        username = validateInstructor()
-        sess = control.getInstrSession(username)
-        print "SESS:"+sess#debug
-        page = control.getSessionPage(sess)
-        length = control.getQuizLength(sess)
-        clkq = questions.giveClickerQuestion(sess,page)
-        state = control.getSessionState(sess)
-        print "ACTION:"+action#debug
+        ###############
+        # Issue:
+        # There is a strange bug that the correct pages aren't always 
+        # served. E.g. click on "next" but the url indicates another
+        # action. This is annoying, but I don't know how to fix it.
+        # For now, however, here is a clause that pervents
+        # immediately showing the answers or skipping to the next
+        # answer. The fix seems to work but buttons don't work very well
+        #################
 
-        if action == "next":
-            another = control.advanceSession(sess)
-            print "ANOTHER STATE = "+ control.getSessionState(sess)#debug
+        ####
+        # Weird redirect bug fix, to pervent passing to next,
+        # showAns, showResp.
+        ###
+        if (state == "init" or state == "ultimatum" or state=="open"):blocked=True
+        else: blocked=False
+        
+        if action == "setsession":
+            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+        elif action == "next":
+            if blocked:#bypass
+                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
+            another = control.advanceSession(session)
             if another:
-                print "Desired desitnation: /conduct/"+sess#debug
-                raise web.seeother("/conduct/"+sess)#for some reason this doesn't always work. Mystery issue.
+                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
             else:
                 return "<a href=\"/\">quiz finished</a>"
 
@@ -467,23 +477,26 @@ class conduct:
 
         elif (action == "closed") or (action == "open"):
             print "ACTION:"+action#debug
+            #return str(wi)
             control.setSessionState(sess,action)
-            raise web.seeother("/conduct/"+sess)#Raise webseeother doesn't seem to work
+            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
 
         elif action == "showAns":
-            if not (state == "init" or state=="open"): control.setSessionState(sess,action)#clause to prevent strange state reload, caused by the Mystery issue
+            if blocked:#bypass
+                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
+            control.setSessionState(sess,action)
+            print "Return answers"
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
         elif action == "showResp":
-            print "Trying to SET TO SHOWRESP"#Debug
-            if not (state == "init" or state =="open"):
-                control.setSessionState(sess,action)#The clause is to deal with the mystery issue.
-                print "CHANGE SUCCESSFUL"
+            if blocked:#bypass
+                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
+            control.setSessionState(sess,action)
             tally = gradebook.tallyAnswers(sess,page)
+            print "retrun tally"
             return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
         
-        return action #for debugging
-    
+        return "gurgle"
 
 
 class databases:
