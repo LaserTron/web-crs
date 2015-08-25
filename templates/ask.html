@@ -1,19 +1,23 @@
-$def with (mathjax,body,qnumber,state)
+$def with (mathjax,body,qnumber,total,state)
 <!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Question $qnumber</title>
+    <title>Question $qnumber of $total</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     $:mathjax
 
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
+    <script src="/static/control.js"></script>
     <script src="/static/ask.js"></script>
 
-    <script> 
+    <script><!-- Set up syync --> 
       var state="$state";
+      var page="$qnumber";
+      var initstate="$state";
+      syncState();
     </script>
 
     
@@ -21,7 +25,7 @@ $def with (mathjax,body,qnumber,state)
   
   <body><!-- need the dolar colon thing!-->
     <div class="container">
-      <h2>Question $qnumber</h2>
+      <h2>Question $qnumber of $total</h2>
     </div>
     $:body
     <div class="container">
@@ -48,7 +52,6 @@ $def with (mathjax,body,qnumber,state)
       <div class="row">
 	<a href="/clearPass/">Reset student passwords</a>
       </div>
-    </div>
-    $state
+      <div class="status" id="message"></div>
   </body>
 </html>

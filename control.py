@@ -225,6 +225,20 @@ def getStudentState(student):
 def getStudentPage(user):
     return getSessionPage(getStudentSession(user))
 
+def getUserSession(user):
+    if isStudent(user):
+        return getStudentSession(user)
+    if isInstructor(user):
+        return getInstrSession(user)
+
+def getUserPage(user):
+    sess = getUserSession(user)
+    return getSessionPage(sess)
+
+def getUserState(user):
+    sess = getUserSession(user)
+    return getSessionState(sess)
+
 def updateEntry(table,col,key,ID,newvalue):
     """
     Enters newvalue in the column corresponding to the given key/ID pair
@@ -233,14 +247,17 @@ def updateEntry(table,col,key,ID,newvalue):
     sqldict={"where":wherestring, col:newvalue}
     ctrl.update(table,**sqldict) #**converts dict to keywords
 
+def getSessionLength(session):    
+    quizstr = gradebook.getSessionQuestions(session)
+    quizli = quizstr.split(',')
+    return len(quizli)
+
 def advanceSession(session):
     """
     Increments the question number. Sets the session to finished if 
     finished.
     """
-    quizstr = gradebook.getSessionQuestions(session)
-    quizli = quizstr.split(',')
-    length = len(quizli)
+    length = getSessionLength(session)
     curpage = getSessionPage(session)
     if curpage >= length-1:
         wherestring = "name = \"{0}\"".format(session)
@@ -271,8 +288,20 @@ def setUltimatum(instr,duration):
     ctrl.update("sessions",**sqldic)
 
 def giveTimeLeft(user):
+    """
+    Computes the time left in the ultimatum. If negative,
+    sets session to closed. Otherwise returns the string representation of 
+    the number of seconds remaining.
+    """
     if isInstructor(user):
         sess = getInstrSession(user)
     else:
         sess = getStudentSession(user)
-    return None
+    timeup = getEntry("sessions","ultimatum","name",sess)
+    now = time.time()
+    left = int(timeup-now)
+    if left < -1:
+        setSessionState(sess,"closed")
+        return "closed"
+    return str(left)
+

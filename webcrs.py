@@ -51,6 +51,7 @@ urls = (#this delcares which url is activated by which class
     '/dropPass/','dropPass',
     '/edit/','edit',
     '/new/','new',
+    '/viewQuestion/','viewQuestion',
     '/uploadImg/','uploadImg'
 )
 
@@ -176,7 +177,7 @@ class question:
         #STATE SWITCH
         if state == "init":
             content = render.notReady()
-        elif state == "open":
+        elif state == "open" or state =="ultimatum":
             content = clkq.getRendered()
         elif state == "closed":
             content = render.closed()
@@ -191,24 +192,37 @@ class question:
 class Comet:
     def GET(self):
         #Take an argument and return a new state. If the state is old then don't return anything. The client also has to loop to request a new state.
-        username = getUsername()
+        username = validateUser()
         wi = web.input()
         state=wi.state
         page=int(wi.page)-1
         interval = 1
         count = 0
         cycles = 5
-        curpage = control.getStudentPage(username)
+        curpage = control.getUserPage(username)
+
         if not page == curpage:
             return "reload"
+
+        if state.isdigit():#ultimatum timer is on
+            sleep(interval)
+            return control.giveTimeLeft(username)
         
-        for i in range(cycles):
-            curstate = control.getStudentState(username)
+        for i in range(cycles):#checks every second for changes
+            curstate = control.getUserState(username)
             if not state == curstate:
-                return curstate
+                if curstate == "ultimatum":
+                    return control.giveTimeLeft(username)
+                else:
+                    return curstate
             else:
                 sleep(interval)
-        return curstate
+
+        if curstate == "ultimatum":
+            #returns the number of seconds remaining
+            return control.giveTimeLeft(username)
+        else:
+            return curstate
 
 class submit:
     def GET(self,choice):
@@ -220,7 +234,8 @@ class submit:
         user = validateStudent()#this is potentially sensitive
         session = control.getStudentSession(user)
         qnumber = control.getSessionPage(session)
-        if control.getStudentState(user) == "open":
+        state = control.getStudentState(user)
+        if state == "open" or state == "ultimatum":
             return gradebook.toggleChoice(user,session,qnumber,choice)
         else:
             return "-1"
@@ -335,7 +350,12 @@ class preview:
         hits = map(cq.clkrQuestion,hits)
         return render.assemble(mathpre,quiz,hits,newqlist)
 #        return render.bootstrap(prev)
-        
+
+class viewQuestion:
+    def GET(self):
+        wi = web.input()
+        return str(wi)
+
 class assemble:#no argument means start a new quiz
     def GET(self):
         validateInstructor()
@@ -389,9 +409,10 @@ class conduct:
         username = validateInstructor()
         control.setInstrSession(username,session)
         page = control.getSessionPage(session)
+        length = control.getSessionLength(session)
         clkq = questions.giveClickerQuestion(session,page)
         state = control.getSessionState(session)
-        return render.ask(mathpre,clkq.renderInstructor(),page+1,state)
+        return render.ask(mathpre,clkq.renderInstructor(),page+1,length,state)
 
     def POST(self,action):
         """
@@ -400,6 +421,7 @@ class conduct:
         username = validateInstructor()
         sess = control.getInstrSession(username)
         page = control.getSessionPage(sess)
+        length = control.getSessionLength(sess)
         clkq = questions.giveClickerQuestion(sess,page)
         state = control.getSessionState(sess)
         
@@ -408,14 +430,14 @@ class conduct:
             if another:
                 raise web.seeother("/conduct/"+sess)
             else:
-                return "quiz finished"
+                return "<a href=\"/\">quiz finished</a>"
 
         elif action == "answers":
-            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
         elif action =="scores":
             tally = gradebook.tallyAnswers(sess,page)
-            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
 
         elif (action == "closed") or (action == "open"):
             control.setSessionState(sess,action)
@@ -423,12 +445,12 @@ class conduct:
 
         elif action == "showAns":
             control.setSessionState(sess,action)
-            return render.ask(mathpre,clkq.showCorrect(),page+1,state)
+            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
         elif action == "showResp":
             control.setSessionState(sess,action)
             tally = gradebook.tallyAnswers(sess,page)
-            return render.ask(mathpre,clkq.showResponses(tally),page+1,state)
+            return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
         
         return action #for debugging
     

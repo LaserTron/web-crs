@@ -7,7 +7,7 @@ $def with (pclq)
 
     <title>Edit</title>
 
-
+    <script src="/static/edit.js"></script>
   </head>
 
   <body>
@@ -47,10 +47,15 @@ $def with (pclq)
       <br>
     </form>
     <form method="GET">
-      <button type="submit" formaction="/uploadImg/">Upload Image</button> 
+      <button type="submit" formaction="/uploadImg/">Upload
+	Image</button>
     </form>
-    
-    <h2>Code Snippets for images</h2>
+    <button onclick="imgUpload()">Test Image</button>
+    <button onclick="preview('$:pclq.getID()')">Preview</button>  
+    <div id="multibox">
+    </div>
+      
+ <!--   <h2>Code Snippets for images</h2>
     <table>
       <tr><th>Code for an inline image</th>
 	<td>
@@ -59,7 +64,7 @@ $def with (pclq)
       </tr>
       <tr><th>Code for a centered figure</th><td>
 	  <textarea cols="60"><div style='text-align:center'><img src='/static/images/rainbow-wolf.jpg'></div></textarea></td></tr>
-    </table>
+    </table> -->
     
   </body>
 </html>
