@@ -574,12 +574,15 @@ class upload:
         wi = web.input()
         fstr = wi['upfile']
         if item == 'qbank':
-            f = open(questionBankLocation,'w')
-            f.write(fstr)
-            f.close()
             questions.updateBank(fstr)
-            return "File uploaded and database updated. Use the back button"
-
+            return "Questionbank updated, no questions overwritten."
+            #     f = open(questionBankLocation,'w')
+            #     f.write(fstr)
+            #     f.close()
+            #     questions.updateBank(fstr)
+            #     return "File uploaded and database updated. Use the back button"
+        
+        
         if item in rosters:
             db = rosters[item][0]
             table = rosters[item][1]
@@ -626,13 +629,16 @@ class edit:
         wi = web.input()
         if not "ID" in wi:
             pclq = pq.Question()
+            pclq.addChoice()
         else:
             bob = questions.getQuestion(wi["ID"])
             pclq = pq.Question()
+            pclq.setID(wi["ID"])
             if not bob == None:#set it to new clicker question
                 clq = cq.clkrQuestion(bob)
                 pclq.eatClq(clq)
-            pclq.setID(wi["ID"])
+            else:
+                pclq.addChoice()
         return render.edit(pclq)
 
     def POST(self):
