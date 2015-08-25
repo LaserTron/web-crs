@@ -207,11 +207,13 @@ class Comet:
         count = 0
         cycles = 5
         curpage = control.getUserPage(username)
+        systate = control.getUserState(username)
+        print "COMET STATE:"+state#debug
 
         if not page == curpage:
             return "reload"
 
-        if state.isdigit():#ultimatum timer is on
+        if state.isdigit() and systate == "ultimatum":#ultimatum timer is on
             sleep(interval)
             return control.giveTimeLeft(username)
         
@@ -284,7 +286,6 @@ class manage:
         return render.manage(bootpre,f)
 
     def POST(self):
-        #debug:
         validateInstructor()
         instr = getUsername()
         wi = web.input()
@@ -430,24 +431,30 @@ class conduct:
         length = control.getQuizLength(session)
         clkq = questions.giveClickerQuestion(session,page)
         state = control.getSessionState(session)
+        print "GET STATE:"+state #debug
         return render.ask(mathpre,clkq.renderInstructor(),page+1,length,state)
 
     def POST(self,action):
         """
-        Enables the instructor to control the progress of the quiz
+        Enables the instructor to control the progress of the quiz.
+        Note: an unnatural clause was added to the showAns and showResp
+        actions. It seems to fix an automatic state change bug.
         """
         username = validateInstructor()
         sess = control.getInstrSession(username)
+        print "SESS:"+sess#debug
         page = control.getSessionPage(sess)
         length = control.getQuizLength(sess)
         clkq = questions.giveClickerQuestion(sess,page)
         state = control.getSessionState(sess)
-        
+        print "ACTION:"+action#debug
+
         if action == "next":
             another = control.advanceSession(sess)
-            print "Another state = "+ control.getSessionState(sess)
+            print "ANOTHER STATE = "+ control.getSessionState(sess)#debug
             if another:
-                raise web.seeother("/conduct/"+sess)
+                print "Desired desitnation: /conduct/"+sess#debug
+                raise web.seeother("/conduct/"+sess)#for some reason this doesn't always work. Mystery issue.
             else:
                 return "<a href=\"/\">quiz finished</a>"
 
@@ -459,15 +466,19 @@ class conduct:
             return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
 
         elif (action == "closed") or (action == "open"):
+            print "ACTION:"+action#debug
             control.setSessionState(sess,action)
-            raise web.seeother("/conduct/"+sess)
+            raise web.seeother("/conduct/"+sess)#Raise webseeother doesn't seem to work
 
         elif action == "showAns":
-            control.setSessionState(sess,action)
+            if not (state == "init" or state=="open"): control.setSessionState(sess,action)#clause to prevent strange state reload, caused by the Mystery issue
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
         elif action == "showResp":
-            control.setSessionState(sess,action)
+            print "Trying to SET TO SHOWRESP"#Debug
+            if not (state == "init" or state =="open"):
+                control.setSessionState(sess,action)#The clause is to deal with the mystery issue.
+                print "CHANGE SUCCESSFUL"
             tally = gradebook.tallyAnswers(sess,page)
             return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
         
