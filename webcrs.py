@@ -208,7 +208,8 @@ class Comet:
         cycles = 5
         curpage = control.getUserPage(username)
         systate = control.getUserState(username)
-        print "COMET STATE:"+state#debug
+        print "Client STATE:"+state#debug
+        print "Server STATE:"+systate
 
         if not page == curpage:
             return "reload"
@@ -460,8 +461,9 @@ class conduct:
         if action == "setsession":
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
         elif action == "next":
-            if blocked:#bypass
-                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
+            #if blocked:#bypass
+            #    return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
+            state = "init"
             another = control.advanceSession(session)
             if another:
                 return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
@@ -476,9 +478,10 @@ class conduct:
             return render.ask(mathpre,clkq.showResponses(tally),page+1,length,state)
 
         elif (action == "closed") or (action == "open"):
-            print "ACTION:"+action#debug
+            #print "ACTION:"+action#debug
             #return str(wi)
             control.setSessionState(sess,action)
+            state = action
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
 
         elif action == "showAns":

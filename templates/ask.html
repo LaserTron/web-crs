@@ -10,14 +10,16 @@ $def with (mathjax,body,qnumber,length,state)
 
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
-    <script src="/static/control.js"></script>
+    <script src="/static/control-instr.js"></script>
     <script src="/static/ask.js"></script>
 
     <script><!-- Set up syync --> 
       var state="$state";
       var page="$qnumber";
       var initstate="$state";
+      if (state == "open" || state =="ultimatum"){
       syncState();
+      }
     </script>
 
     
