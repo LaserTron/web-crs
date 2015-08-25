@@ -35,7 +35,7 @@ $def with(preamble,yoursession,sessdic)
 	      <th>Session</th>
 	    </tr>
 	    $for i in sessdic:
-	         <tr><td>$i</td><td><a href="/conduct/$sessdic[i]">$sessdic[i]</a></td></tr>
+	         <tr><td>$i</td><td><a href="/conduct/?action=setsession&session=$sessdic[i]">$sessdic[i]</a></td></tr>
 
 	  </table>
 	</div>

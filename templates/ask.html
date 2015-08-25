@@ -33,28 +33,28 @@ $def with (mathjax,body,qnumber,length,state)
 
 	  
 	  $if state == "open" or state =="ultimatum":
-               <form method="post">
-               <button formaction="/conduct/scores">See responses</button>
-	       <button formaction="/conduct/answers">See correct</button>
-	       <button formaction="/conduct/closed">Close</button>
+               <form method="get">
+               <button type="submit" name="action" value="scores">See responses</button>
+	       <button type="submit" name="action" value="answers">See correct</button>
+	       <button type="submit" name="action" value="closed">Close</button>
 	       <br>
 	       </form>
 	       <button onclick="setTimer('60')">60 second timer</button>
 	       <button onclick="setTimer('30')">30 second timer</button>
 	       
 	  $elif state == "init":
-               <form method="post">
-	       <button formaction="/conduct/open"><h2>Open</h2></button>
-	       <button formaction="/conduct/next">Skip</button>
+               <form method="get">
+	       <button type="submit" name="action" value="open"><h2>Open</h2></button>
+	       <button type="submit" name="action" value="next">Skip</button>
 	       </form>
 	  $else:
-	       <form method="post">
-	       <button formaction="/conduct/scores">See responses</button>
-	       <button formaction="/conduct/answers">See correct</button>
-	       <button formaction="/conduct/showResp">Show Responses</button>
-	       <button formaction="/conduct/showAns">Show Correct</button>
+	       <form method="get">
+	       <button type="submit" name="action" value="scores">See responses</button>
+	       <button type="submit" name="action" value="answers">See correct</button>
+	       <button type="submit" name="action" value="showResp">Show Responses</button>
+	       <button type="submit" name="action" value="showAns">Show Correct</button>
 
-	       <button formaction="/conduct/next">Next question</button>
+	       <button type="submit" name="action" value="next">Next question</button>
 	       </form>
       </div>
       <div class="row">
