@@ -199,6 +199,7 @@ class Comet:
         /static/control.js for the client-side code that goes 
         with this.
         """
+        username = validateUser()
         wi = web.input()
         state=wi.state
         page=int(wi.page)-1
@@ -444,6 +445,7 @@ class conduct:
         
         if action == "next":
             another = control.advanceSession(sess)
+            print "Another state = "+ control.getSessionState(sess)
             if another:
                 raise web.seeother("/conduct/"+sess)
             else:
