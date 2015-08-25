@@ -1,23 +1,3 @@
-// var answerString;
-// function updateAnswers(){
-//     var answerStack = [];
-//     var nonAnswers = [];
-//     check = document.getElementsByName("ansChoice");
-//     for (var c = 0; c < check.length;c++){
-// 	var ans = check[c].value;
-// 	if(check[c].checked){
-// 	    answerStack .push(ans);
-// 	}//if selected
-// 	else{
-// 	    nonAnswers .push(ans);
-// 	}
-//     }//forloop
-//     nonAnswers = nonAnswers .join("/");
-//     answerStack = answerStack .join("/");
-//     answerString = answerStack + "/XXX/"+nonAnswers;
-    
-// }
-
 function clickChoice(ans)
 {
     // This function will send the student
@@ -49,25 +29,10 @@ function clickChoice(ans)
     ansTrans.send();
 }
 
-// function sendAnswer()
-// {
-//     var qstring = "/submit/"
-//     var ansTrans;
-//     ansTrans=new XMLHttpRequest();
-    
-//     ansTrans.onreadystatechange=function()
-//     {
-// 	if (ansTrans.readyState==4 && ansTrans.status==200){
-// 	    var response = ansTrans.responseText;
-// 	    document.getElementById("debug").innerHTML=response;
-// 	}
-//     }
-//     qstring=qstring+answerString;
-//     ansTrans.open("GET",qstring,true);
-//     ansTrans.send();
-// }
-
-// function buttonizer(){
-//     updateAnswers();
-//     sendAnswer();
-// }
+function setTimer(time)
+{
+    var timeurl = "/setTimer/?time="+time;
+    var timeReq=new XMLHttpRequest();
+    timeReq.open("GET",timeurl,true);
+    timeReq.send();
+}

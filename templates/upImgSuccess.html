@@ -1,0 +1,24 @@
+$def with (bootstrap,fname)
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Upload success</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    $:bootstrap
+  </head>
+  
+  <body>
+    <div class="container">
+      <strong>Upload result:</strong>
+      Here is the code snippet to include your image<br>
+      <textarea cols=50 rows=2><img src="/static/images/$fname">
+      </textarea><br>
+      Code for a centered figure:<br>
+      <textarea cols="60"><div style='text-align:center'><img src='/static/images/$fname'></div>
+      </textarea><br>
+      <a href="/uploadImg/">Upload another image.</a><br>
+      <img src="/static/images/$fname">
+    </div>
+</body>
+</html>

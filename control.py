@@ -225,6 +225,20 @@ def getStudentState(student):
 def getStudentPage(user):
     return getSessionPage(getStudentSession(user))
 
+def getUserSession(user):
+    if isStudent(user):
+        return getStudentSession(user)
+    if isInstructor(user):
+        return getInstrSession(user)
+
+def getUserPage(user):
+    sess = getUserSession(user)
+    return getSessionPage(sess)
+
+def getUserState(user):
+    sess = getUserSession(user)
+    return getSessionState(sess)
+
 def updateEntry(table,col,key,ID,newvalue):
     """
     Enters newvalue in the column corresponding to the given key/ID pair
@@ -294,3 +308,4 @@ def giveTimeLeft(user):
         setSessionState(sess,"closed")
         return "closed"
     return str(left)
+

@@ -1,11 +1,12 @@
 function upDate(){
-    if (state != initstate){
+    if (!isNaN(state)){/*Works if true*/
+	var msgbox=document.getElementById("message");
+	msg = "Time left:"+state+" seconds";
+	msgbox.innerHTML=msg;
+    }
+    else if (state != initstate && isNaN(state)){
 	history.go(0);
     }
-    
-    var msgbox=document.getElementById("message");
-    msgbox.innerHTML=state;
-    
 }
 
 
@@ -21,7 +22,7 @@ function syncState()
 	{
 	    var response = stateReq.responseText;
 	    state = response;
-	    if (state == initstate){
+	    if (state == initstate || !isNaN(state)){
 		syncState();/* This is what makes the client-side loop*/
 	    }
 	    upDate();

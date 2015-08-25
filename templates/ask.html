@@ -10,10 +10,14 @@ $def with (mathjax,body,qnumber,length,state)
 
     <link href="/static/question.css" rel="stylesheet">
     <script type="text/javascript">var state="initial"; </script>
+    <script src="/static/control.js"></script>
     <script src="/static/ask.js"></script>
 
-    <script> 
+    <script><!-- Set up syync --> 
       var state="$state";
+      var page="$qnumber";
+      var initstate="$state";
+      syncState();
     </script>
 
     
@@ -26,30 +30,36 @@ $def with (mathjax,body,qnumber,length,state)
     $:body
     <div class="container">
       <div class="row" align="center">
-	<form method="post">
-	  <!-- button formaction="/conduct/close">Close</button-->
-	  $if state == "open":
-	       <button formaction="/conduct/scores">See responses</button>
+
+	  
+	  $if state == "open" or state =="ultimatum":
+               <form method="post">
+               <button formaction="/conduct/scores">See responses</button>
 	       <button formaction="/conduct/answers">See correct</button>
 	       <button formaction="/conduct/closed">Close</button>
+	       <br>
+	       </form>
+	       <button onclick="setTimer('60')">60 second timer</button>
+	       <button onclick="setTimer('30')">30 second timer</button>
 	       
 	  $elif state == "init":
+               <form method="post">
 	       <button formaction="/conduct/open"><h2>Open</h2></button>
 	       <button formaction="/conduct/next">Skip</button>
-
+	       </form>
 	  $else:
+	       <form method="post">
 	       <button formaction="/conduct/scores">See responses</button>
 	       <button formaction="/conduct/answers">See correct</button>
 	       <button formaction="/conduct/showResp">Show Responses</button>
 	       <button formaction="/conduct/showAns">Show Correct</button>
 
 	       <button formaction="/conduct/next">Next question</button>
-	</form>
+	       </form>
       </div>
       <div class="row">
 	<a href="/clearPass/">Reset student passwords</a>
       </div>
-    </div>
-    $state
+      <div class="status" id="message"></div>
   </body>
 </html>
