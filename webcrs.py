@@ -684,7 +684,7 @@ class setTimer:
     def GET(self):
         username = validateInstructor()
         t=web.input()['time']
-        control.setUltimatum('username',int(t))
+        control.setUltimatum(username,int(t))
         
 #Rock and Roll!
 if __name__ == "__main__":
