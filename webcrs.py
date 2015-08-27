@@ -180,7 +180,7 @@ class question:
         #STATE SWITCH
         if state == "init":
             content = render.notReady()
-            title = "Not ready"
+            title = "Get ready"
         elif state == "open" or state =="ultimatum":
             title="Question"
             content = clkq.getRendered()
