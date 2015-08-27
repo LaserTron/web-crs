@@ -103,6 +103,8 @@ def fixChoiceLine(a):
 def choiceDict(q):#takes an enumerate environment
     liq = q.split('\\item')
     liq.remove(liq[0])
+    if liq ==[]:#fixes the no answe choice bug.
+        return {}
     lastentry = liq[len(liq)-1]
     lastentry = lastentry.split('\\end{enumerate}')[0]
     liq[len(liq)-1]=lastentry

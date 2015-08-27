@@ -169,6 +169,8 @@ class question:
             raise web.seeother("/logout/?msg=unauthorized")
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
+        if page == None:
+            return render.studentFinished()
         state = control.getSessionState(sess)
         if state == "finished":
             return render.studentFinished() 
@@ -178,7 +180,7 @@ class question:
         #STATE SWITCH
         if state == "init":
             content = render.notReady()
-            title = "Not ready"
+            title = "Get ready"
         elif state == "open" or state =="ultimatum":
             title="Question"
             content = clkq.getRendered()

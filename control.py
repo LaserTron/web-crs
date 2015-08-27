@@ -27,7 +27,11 @@ def getEntry(table,col,key,ID):
     """
     wherestring = "{0}=\"{1}\"".format(key,ID)
     bob = ctrl.select(table,where=wherestring,what=col)
-    return bob[0][col]
+    if bool(bob): #Calling bool(bob) depletes the iterator  
+        bob = ctrl.select(table,where=wherestring,what=col)
+        return bob[0][col]
+    else:
+        return None
 
 def isStudent(user):
     return isInTable("students","username",user)
