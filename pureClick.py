@@ -68,10 +68,11 @@ class Question:
     def rmChoice(self):
         "Delete last answer choice"
         choices = self.choices.keys()
-        choices.sort()
-        lastkey = choices.pop()
-        self.choices.pop(lastkey)
-        if lastkey in self.correct: self.correct.remove(lastkey)
+        if not choices == []:#fixes remove something from nothing bug
+            choices.sort()
+            lastkey = choices.pop()
+            self.choices.pop(lastkey)
+            if lastkey in self.correct: self.correct.remove(lastkey)
         
     def setChoice(self,ch,content):
         self.choices[ch]="content"
