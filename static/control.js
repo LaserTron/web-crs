@@ -5,7 +5,9 @@ function upDate(){
 	msgbox.innerHTML=msg;
     }
     else if (state != initstate && isNaN(state)){
-	history.go(0);
+	/*history.go(0); THIS COMMAND DOESN'T WORK FOR FIREFOX*/
+	/*Thanks: http://stackoverflow.com/questions/1536900/force-a-page-refresh-using-javascript-in-firefox*/
+	window.location.href = "/" + "?" + Date.parse(new Date());
     }
 }
 
