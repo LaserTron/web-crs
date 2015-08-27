@@ -169,6 +169,8 @@ class question:
             raise web.seeother("/logout/?msg=unauthorized")
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
+        if page == None:
+            return render.studentFinished()
         state = control.getSessionState(sess)
         if state == "finished":
             return render.studentFinished() 
