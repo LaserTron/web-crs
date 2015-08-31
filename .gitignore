@@ -3,3 +3,6 @@
 
 #Python
 *.pyc
+
+#For Stevens branch
+templates/login.html
