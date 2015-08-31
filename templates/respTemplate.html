@@ -15,10 +15,10 @@ $def with (clkrq,tally)
 
   <div class="row">
     <!--form-->
-      $for ans in clkrq.getChoiceDict():
+      $for ans in clkrq.getChoices():
            <div class="container"><div class="rounded col-sm-6"
            id="box$ans">
-           $clkrq.getChoiceDict()[ans] <div style="float:right;display:inline">$tally[ans]%</div></div></div>
+           $:clkrq.getChoiceDict()[ans] <div style="float:right;display:inline">$tally[ans]%</div></div></div>
 
 
       </div>

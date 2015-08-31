@@ -59,6 +59,12 @@ class Question:
     def getChoices(self):
         return self.choices
 
+    def getChoiceList(self):
+        output = []
+        for i in self.choices:output.append(i)
+        output.sort()
+        return output
+
     def addChoice(self):
         zero=ord('A')
         l = zero+len(self.choices)
