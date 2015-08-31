@@ -171,6 +171,7 @@ class clkrQuestion:
         output = []
         for i in self.getChoiceDict():
             output.append(i)
+        output.sort()
         return output
         
     def addToDb(self):

@@ -16,7 +16,7 @@ $def with (clkrq,colordic,tally)
   <div class="row">
     <form>
       $for ans in clkrq.getChoiceDict():
-           <div class="container"><div class="rounded col-sm-6" id="box$ans" style="background-color: $colordic[ans]"> $clkrq.getChoiceDict()[ans]<strong>$tally[ans]%</strong></div></div>
+           <div class="container"><div class="rounded col-sm-6" id="box$ans" style="background-color: $colordic[ans]"> $:clkrq.getChoiceDict()[ans]<strong>$tally[ans]%</strong></div></div>
 
 
       </div>

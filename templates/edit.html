@@ -33,7 +33,7 @@ $def with (pclq)
 	<tr>
 	  <th> Answer Id</th><th>Answer</th><th>Correct</th>
 	</tr>
-	  $for i in pclq.getChoices():
+	  $for i in pclq.getChoiceList():
 	       $:pclq.writeChoiceRow(i)
       </table>
       <button type="submit" formaction="/edit/?action=save">Save</button>
