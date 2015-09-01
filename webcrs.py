@@ -475,6 +475,7 @@ class conduct:
             #    return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
             state = "init"
             another = control.advanceSession(session)
+            page = page+1 #To ensure that the correct page is displayed
             if another:
                 return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
             else:

@@ -108,6 +108,11 @@ def makeSession(sname,qid):
     if isInTable("sessions","name",sname):
         return False
 
+    # I'm not sure why these lines aren't already applied,
+    # but they're added here to speed things up
+    gdbk.query("PRAGMA journal_mode=off")
+    gdbk.query("PRAGMA synchronous=off")
+    # 
     qblocks = questions.getQblocks(qid)
     qlist = map(cq.clkrQuestion,qblocks)        
     sqlstring = "CREATE TABLE {0}(username TEXT)".format(sname)
