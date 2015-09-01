@@ -16,7 +16,7 @@ $def with (clkrq)
   <div class="row">
     <form>
       $for ans in clkrq.getChoices():
-           <div class="col-sm-6 container"><div class="rounded"	onclick="clickChoice('$ans')" id="$ans">$:clkrq.getChoiceDict()[ans] </div></div>
+           <div class="col-sm-12 container"><div class="rounded"	onclick="clickChoice('$ans')" id="$ans">$:clkrq.getChoiceDict()[ans] </div></div>
 <!-- Add some javascript that reinitializes all the questions -->
 	   
       </div>

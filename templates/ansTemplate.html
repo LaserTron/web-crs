@@ -16,7 +16,7 @@ $def with (clkrq,colordic)
   <div class="row">
     <form>
       $for ans in clkrq.getChoices():
-           <div class="container"><div class="rounded col-sm-6" id="box$ans" style="background-color: $colordic[ans]"> $:clkrq.getChoiceDict()[ans]</div></div>
+           <div class="container"><div class="rounded col-sm-12" id="box$ans" style="background-color: $colordic[ans]"> $:clkrq.getChoiceDict()[ans]</div></div>
 
 
       </div>
