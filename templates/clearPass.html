@@ -20,7 +20,7 @@ $def with (preamble,stulist)
 	<form method="POST">
 	  <table>
 	    $for i in stulist:
-	         <tr><td><button type="submit" formaction="/clearPass/?user=$i"> <h3>$i</h3></button></td></tr>
+	         <tr><td><button type="submit" name="user" value="$i"> <h3>$i</h3></button></td></tr>
 	  </table>
 	</form>
       </div>
