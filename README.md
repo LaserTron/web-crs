@@ -27,11 +27,10 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation. (Note this can me spoofed, by asking questions twice in a row, there is an option to skip a question before showing it to students.)
 * Encryption, i.e. https.
 
-##Required packages:
+##Required package:
 * `python2`
-* `sqlite3`
 
-##Required python modules:
+##Required python module:
 * `web.py` (installable via python 2 `easy_install`)
 
 ##How to get it running:
