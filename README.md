@@ -27,15 +27,14 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation. (Note this can me spoofed, by asking questions twice in a row, there is an option to skip a question before showing it to students.)
 * Encryption, i.e. https.
 
-##Required packages:
+##Required package:
 * `python2`
-* `sqlite3`
 
-##Required python modules:
+##Required python module:
 * `web.py` (installable via python 2 `easy_install`)
 
 ##How to get it running:
-Download the directory, ensure the required packages and python 2 modules are installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges.
+Download the directory, ensure the required packages and python 2 module is installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges.
 
 Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar. To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. By default the usernames are unset.
 
