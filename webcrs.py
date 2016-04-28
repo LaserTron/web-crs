@@ -31,6 +31,7 @@ import csvtosqlite3 as csvsql
 
 urls = (#this delcares which url is activated by which class
     '/', 'index',
+    '/direct/','direct', #This is for when credentials are provided in web-input
     '/comet/', 'Comet',
     '/quiz/(.+)','question',
     '/conduct/','conduct',
@@ -53,7 +54,8 @@ urls = (#this delcares which url is activated by which class
     '/new/','new',
     '/setTimer/','setTimer',
     '/viewQuestion/','viewQuestion',
-    '/uploadImg/','uploadImg'
+    '/uploadImg/','uploadImg',
+    '/populatePassHash','pph'
 )
 
 render = web.template.render('templates/')
@@ -161,7 +163,16 @@ class index:
         web.setcookie('clicker-passhash', passhash)
         raise web.seeother("/")
 
-
+class direct:
+    def GET(self):
+        wi = web.input()
+        username = wi["user"]
+        passhash = wi["passhash"]
+        web.setcookie('clicker-username', username)
+        web.setcookie('clicker-passhash', passhash)
+        raise web.seeother("/")
+        
+    
 class question:
     def GET(self,username):
         student = validateStudent()#ensures credentials are okay
@@ -476,7 +487,7 @@ class conduct:
             state = "init"
             another = control.advanceSession(session)
             page = page+1 #To ensure that the correct page is displayed
-            clkq = questions.giveClickerQuestion(session,page)#update clickerquestion
+            clkq = questions.giveClickerQuestion(session,page)#update clickerquestion to be displayed
             if another:
                 return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
             else:
@@ -689,7 +700,15 @@ class setTimer:
         username = validateInstructor()
         t=web.input()['time']
         control.setUltimatum(username,int(t))
-        
+
+class pph:
+    """
+    This is just a quick an dirty method to invoke control.populatePassHash
+    """
+    def GET(self):
+        validateInstructor()
+        control.populatePassHash()
+        raise web.seeother("/instructor/")
 #Rock and Roll!
 if __name__ == "__main__":
     app = web.application(urls, globals())

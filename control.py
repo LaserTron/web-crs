@@ -41,7 +41,7 @@ def isInstructor(user):
 
 def getPassHash(user):
     """
-    Returns the hash of the user's password or returns false if 
+    Returns the hash of the user's password which is stored in control.db or returns false if 
     the user doesn't exist.
     """
     emp = lambda x: x==None or x=="" or x.isspace()
@@ -59,7 +59,25 @@ def getPassHash(user):
             return paswd
     else:
         return False    
-    
+
+def populatePassHash():
+    """This method will go through the usernames of all
+    students and instructors will assign to the password column the
+    sha1digest+salt (see the sha1digest function) of the
+    username. This is used for direct login.
+
+    """
+    #wherestring="section=\"{0}\"".format(section)
+    stus = ctrl.select("students",what='username')
+    instrs = ctrl.select("instructors",what='username')
+    for i in stus:
+        uname = i['username']
+        setPassword(uname,uname)#this will salt and hash the username and put it in password
+    for i in instrs:
+        uname = i['username']
+        setPassword(uname,uname)#this will salt and hash the username and put it in password
+    #return None
+
 def setPassword(user,paswd):
     """
     Stores a hash of the user's password. Returns false if 
