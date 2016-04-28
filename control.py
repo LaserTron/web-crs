@@ -145,7 +145,10 @@ def getInstrSections(instr):
     
 
 def addSection(nam):
-    nam=nam.strip()
+    if not nam == None:
+        nam = nam.strip()
+    else:
+        nam = ""
     res = isInTable('sections','name', nam)
     if not res:#no user there
         ctrl.insert('sections', name = nam)
