@@ -10,14 +10,17 @@ import pureClick as pq
 import csvtosqlite3 as csvsql
 
 ############
-# This block is supposed to get HTTPS going.
-# reference:  http://webpy.org/cookbook/ssl
-# It does not work
+# This block is to get HTTPS going.
+# The instruction  http://webpy.org/cookbook/ssl do not work, 
+# but following the instructions
+# http://www.8bitavenue.com/2015/05/webpy-ssl-support/
+# works. You may uncomment the three commands below this to get ssl, but you
+# still need a certifying authority.
 #############
 # from web.wsgiserver import CherryPyWSGIServer
-# CherryPyWSGIServer.ssl_certificate = "ssl/clicker-webapp.cert"
-# CherryPyWSGIServer.ssl_private_key = "ssl/clicker-webapp.key"
-############
+# CherryPyWSGIServer.ssl_certificate = "server.crt"
+# CherryPyWSGIServer.ssl_private_key = "server.key"
+# ############
 #End HTTPS block.
 #############
 
@@ -310,9 +313,9 @@ class manage:
         for j in allsections:
             if j in selection:            
                 control.assignInstructor(instr,j)
-            else:
-                control.assignInstructor("",j)
-
+            #else:
+                #control.assignInstructor("",j)
+            #this bug prevents multiple instructors
         raise web.seeother('/instructor/')
 
 class assign:
