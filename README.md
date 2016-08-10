@@ -67,6 +67,8 @@ fastcgi.server = ( "/webcrs.py" =>
 ))
 )
 
+mimetype.assign = (".css" => "text/css")
+
 url.rewrite-once = (
    "^/favicon.ico$" => "/static/favicon.ico",
    "^/static/(.*)$" => "/static/$1",
