@@ -174,7 +174,7 @@ class direct:
         passhash = wi["passhash"]
         username = control.getEntry("students","username","password",passhash)
         if username == None:#i.e. it's an isntructor
-            username = control.getEntry("instructors",username,"password",passhash)
+            username = control.getEntry("instructors","username","password",passhash)
         web.setcookie('clicker-username', username)
         web.setcookie('clicker-passhash', passhash)
         raise web.seeother("/")
