@@ -37,7 +37,7 @@ urls = (#this delcares which url is activated by which class
     '/', 'index',
     '/direct/','direct', #This is for when credentials are provided in web-input
     '/comet/', 'Comet',
-    '/quiz/(.+)','question',
+    '/quiz/','question',
     '/conduct/','conduct',
     '/submit/(.+)', 'submit',
     '/addQuiz/', 'addQuiz',
@@ -150,7 +150,7 @@ class index:
         if control.isInTable('instructors','username',username):
             destination = '/instructor/'
         elif control.isInTable('students','username',username):
-            destination = '/quiz/{0}'.format(username)
+            destination = '/quiz/'#{0}'.format(username) DO WE REALLY NEED TO DISPLAY THE USERNAME?
         else:
             raise web.seeother("/logout/?msg=notfound")
 
@@ -181,10 +181,11 @@ class direct:
         
     
 class question:
-    def GET(self,username):
+    def GET(self):#,username):
         student = validateStudent()#ensures credentials are okay
-        if not student==username:
-            raise web.seeother("/logout/?msg=unauthorized")
+        username = student
+        #if not student==username:
+        #    raise web.seeother("/logout/?msg=unauthorized")
         sess = control.getStudentSession(username)
         page = control.getSessionPage(sess)
         if page == None:
