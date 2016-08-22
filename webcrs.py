@@ -168,10 +168,13 @@ class index:
         raise web.seeother("/")
 
 class direct:
-    def GET(self):
+    def POST(self):#modified to avoid sending user ids over the internet
         wi = web.input()
-        username = wi["user"]
+        #username = wi["user"]
         passhash = wi["passhash"]
+        username = control.getEntry("students","username","password",passhash)
+        if username == None:#i.e. it's an isntructor
+            username = control.getEntry("Instructors",username,"password",passhash)
         web.setcookie('clicker-username', username)
         web.setcookie('clicker-passhash', passhash)
         raise web.seeother("/")
