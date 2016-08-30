@@ -8,7 +8,7 @@ import time
 #Requires a DB with a tabe called 'Users' with columns 'username' and 'section'
 
 def sha1digest(s):
-    salt = "boy this is salty frdew34567uhygfrer6uhgfrtyuhijhbgftrdfg"
+    salt = "saltymcsalty"
     ho = hashlib.sha1(s+salt)
     return ho.hexdigest()
 
