@@ -160,7 +160,7 @@ class index:
         i = web.input()
         username=i.username
         password=i['password']
-        passhash = control.sha1digest(password)
+        passhash = password #control.sha1digest(password) #DISABLE HACK
         if control.getPassHash(username) == None:
             control.setPassword(username,password)
         web.setcookie('clicker-username', username)
