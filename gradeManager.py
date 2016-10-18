@@ -204,6 +204,8 @@ class masterGradebook:
         self.rows=[]
 
     def fillIn(self,cutoffRate=0.3,cutoffScore=0.2,forgetRatio=4,quorumRatio=0.5):
+        droppedSessions = [] #don't remove while iterating!!
+        
         for sess in self.sessionlist:#go through session list
             ses = Session(sess,cutoffRate=cutoffRate,cutoffScore=cutoffScore,forgetRatio=forgetRatio,quorumRatio=quorumRatio)#makes an instance of Session
             results = ses.compileStats()#returns a dictionary with student scores
@@ -217,9 +219,10 @@ class masterGradebook:
                     except KeyError:#No dictionary created yet
                         self.master[student]={sessname:score}#initialize dictionary
                 self.Sessions.append(ses)
-            else: self.sessionlist.remove(sess)#didn't have quorum
+            else: droppedSessions.append(sess)#didn't have quorum
 
-                
+        self.sessionlist = [a for a in self.sessionlist if not(a in droppedSessions)]
+
         self.rows=[]#clear rows
         for s in self.master:
             en = self.master[s]
