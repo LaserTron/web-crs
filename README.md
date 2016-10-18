@@ -31,7 +31,7 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * `python2`
 
 ##Required python module:
-* `web.py` (installable via python 2 `easy_install`)
+* `web.py` (installable via python 2 `easy_install` or `pip install webpy`.)
 
 ##How to get it running:
 Download the directory, ensure the required packages and python 2 module is installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges. **Due to web.py's limitations, this program will not work with more than 10 users. See Deployment below**
