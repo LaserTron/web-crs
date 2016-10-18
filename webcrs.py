@@ -142,10 +142,10 @@ class index:
                 "logout":"Cookies deleted. Logged out",
                 "notfound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
-                "clear":"Enter your new password if first time use or password reset.",
+                "clear":render.formLogin(),
                 "newpass":"Your password has been cleared. Please enter your username and new password."
             }
-            return render.login(bootpre,message[status])
+            return message[status]#render.login(bootpre,message[status])
 
         if control.isInTable('instructors','username',username):
             destination = '/instructor/'
@@ -160,7 +160,7 @@ class index:
         i = web.input()
         username=i.username
         password=i['password']
-        passhash = control.sha1digest(password)
+        passhash = password #control.sha1digest(password) #DISABLE HACK
         if control.getPassHash(username) == None:
             control.setPassword(username,password)
         web.setcookie('clicker-username', username)
