@@ -100,3 +100,24 @@ def sqlite3TableToIter(db,table):
     inio.seek(0)
     reader = csv.reader(inio)
     return reader
+
+def sqlite3TableToDictList(db,table):
+    """
+    Returns a list of dictionnaries corresponding to 
+    the entries of the table.
+    """
+    db = getDbObject(db)
+    return map(lambda x: dict(x), list(db.select(table)))
+
+def dictListToCsvString(dili,fields=None):
+    "Takes a list of dictionaries, and uses the csv.dictwriter"
+    outio = csi.StringIO()
+    if fields==None:
+        writer = csv.DictWriter(outio)
+    else:
+        writer = csv.DictWriter(outio,fieldnames=fields)
+    writer.writeheader()
+    for i in dili:
+        writer.writerow(i)
+    outio.seek(0)
+    return outio.read()
