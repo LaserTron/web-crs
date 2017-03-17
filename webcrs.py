@@ -393,6 +393,8 @@ class addQuiz:
         validateInstructor()
         i = web.input()
         newquiz = i['newquiz']
+        if ("-" in newquiz or " " in newquiz):
+            return "Used a forbidden character. Press back and try again"
         questions.addQuiz(newquiz)
         raise web.seeother('/assemble/')
         
@@ -658,7 +660,7 @@ class new:
     def POST(self):
         validateInstructor()
         ID = web.input()['ID']
-        if questions.isInTable("questionbank","ID",ID):
+        if questions.isInTable("questionbank","ID",ID) or (("-" in ID) or (" " in ID)): #hyphens and spaces destroy everything.
             return render.newQuestion(ID)
         else:
             raise web.seeother("/edit/?ID={0}".format(ID))
