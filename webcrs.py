@@ -142,7 +142,7 @@ class index:
                 "logout":"Cookies deleted. Logged out",
                 "notfound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
-                "clear":"<html><body>Please access via <a href=\"http://web.stevens.edu/calculus/crs\">this link.</a></body></html>",
+                "clear":"Enter your new password if first time use or password reset.",
                 "newpass":"Your password has been cleared. Please enter your username and new password."
             }
             return message[status]#render.login(bootpre,message[status])
