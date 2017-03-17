@@ -7,9 +7,10 @@ $def with (exists)
 
   <body>
     $if not exists == None:
-         <p>The ID $exists exists. Please select another. </p>
+         <p>The ID $exists exists or contains a forbidden character. Please select another. </p>
     <p>
-      Please enter the ID of the new question:
+      Please enter the ID of the new question (do not use hyphens "-"
+      or spaces " "):
       <form method="post">
 	<input name="ID"><input type="submit">
       </form>
