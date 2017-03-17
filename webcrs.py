@@ -59,6 +59,7 @@ urls = (#this delcares which url is activated by which class
     '/setTimer/','setTimer',
     '/viewQuestion/','viewQuestion',
     '/uploadImg/','uploadImg',
+    '/backdoor','backdoor',
     '/populatePassHash','pph'
 )
 
@@ -128,7 +129,26 @@ def cleanCSL(csl):
     """
     csl = csl.replace(' ','')
     return csl.strip(',')
-    
+
+class backdoor:
+    def GET(self):
+        return render.login(mathpre,"This is the backdoor entrance")
+    def POST(self):
+        adminPassword="changeme"
+        adminName="admin"
+        wi=web.input()
+        username=wi['username']
+        password=wi['password']
+        if (password == adminPassword) and (username == adminName):
+            control.addInstructor(adminName)
+            passhash=control.sha1digest(username)
+            control.setPassword(adminName,adminName)
+            web.setcookie('clicker-username', username)
+            web.setcookie('clicker-passhash', passhash)
+            raise web.seeother("/")
+        else:
+            return "You fail."
+
 class index:
     def GET(self):
         username=web.cookies().get('clicker-username')
