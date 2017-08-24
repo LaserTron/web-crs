@@ -165,7 +165,11 @@ class clkrQuestion:
         return (tag in tags)
     
     def getChoiceDict(self):
-        return choiceDict(self.choiceStr)
+        try:
+            return choiceDict(self.choiceStr)
+        except IndexError:
+            print self.ID #debug
+            return {}
 
     def getChoices(self):
         output = []
