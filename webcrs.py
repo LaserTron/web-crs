@@ -510,7 +510,7 @@ class conduct:
         else: blocked=False
         
         if action == "setsession":
-            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+            return render.ask(mathpre,clkq.showQuestion(),page+1,length,state)        
 
         elif action == "next":
 
@@ -520,12 +520,15 @@ class conduct:
                 page = page+1 #To ensure that the correct page is displayed
                 clkq = questions.giveClickerQuestion(session,page)#update clickerquestion to be displayed
                 if another:
-                    return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+                    return render.ask(mathpre,clkq.showQuestion(),page+1,length,state)        
                 else:
                     return "<html><body><a href=\"/\">quiz finished</a></body></html>"
             except IndexError:
                 return "<html><body>Problem session is over. <a href=\"/\">Return to main page.</a></body></html>"
 
+        elif action == "question":
+            return render.ask(mathpre,clkq.showQuestion(),page+1,length,state)    
+            
         elif action == "answers":
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
 
@@ -538,7 +541,7 @@ class conduct:
             #return str(wi)
             control.setSessionState(sess,action)
             state = action
-            return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+            return render.ask(mathpre,clkq.showQuestion(),page+1,length,state)        
 
         elif action == "showAns":
             if blocked:#bypass

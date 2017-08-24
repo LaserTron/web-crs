@@ -3,3 +3,7 @@
 
 #Python
 *.pyc
+
+*.db
+
+*.orig

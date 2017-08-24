@@ -36,8 +36,9 @@ $def with (mathjax,body,qnumber,length,state)
 	  
 	  $if state == "open" or state =="ultimatum":
                <form method="get">
-               <button type="submit" name="action" value="scores">See responses</button>
-	       <button type="submit" name="action" value="answers">See correct</button>
+               <button type="submit" name="action" value="question">Hide answer</button>
+	       <button type="submit" name="action" value="scores">See responses</button>
+	       <button type="submit" name="action" value="answers">See answer</button>
 	       <button type="submit" name="action" value="closed">Close</button>
 	       <br>
 	       </form>

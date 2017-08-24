@@ -199,10 +199,13 @@ class clkrQuestion:
 
     def renderInstructor(self):
         return self.showCorrect()
+
+    def showQuestion(self):
+        return self.getRendered()
     
     def showResponses(self,tally):
         return render.respTemplate(self,tally)
-
+    
     def showCorrect(self):
         colordic = self.getChoiceDict()
         correct = self.getAnswers()
