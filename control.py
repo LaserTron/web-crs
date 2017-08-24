@@ -6,9 +6,12 @@ import time
 #
 #Requires a DB with a table called 'States' with columns 'state' and 'page'
 #Requires a DB with a tabe called 'Users' with columns 'username' and 'section'
+#
+
+#This is the salt which must be chaged.
+salt="saltysalt"
 
 def sha1digest(s):
-    salt = "saltymcsalty"
     ho = hashlib.sha1(s+salt)
     return ho.hexdigest()
 

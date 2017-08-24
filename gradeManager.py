@@ -16,7 +16,7 @@ from clickerQuestions import clkrQuestion
 class Session:
     
     "Essentially a nice wrapper for a table in gradebook.db"
-    def __init__(self,sessname,cutoffRate=0.3,cutoffScore=0.2,forgetRatio=4,quorumRatio=0.5):
+    def __init__(self,sessname,cutoffRate=0.3,cutoffScore=0.2,forgetRatio=4,quorumRatio=0.3):
         """cutoffRate excludes questions that were notmissed by more than that many students.
         cutoffScore exsludes questions that scored below that threshold. forgetRatio
         gives the ratio of questions that may be missed. Quorum is the fraction the 
@@ -175,7 +175,10 @@ response rate:{rate}""".format(num=str(i),avg=av,rate=ra)
                 print "WHOA:"+str(scores)
                 score = 0
             self.scores[name]=score
-            weightedScores[name]=score/(total*1.0)
+            try:
+                weightedScores[name]=score/(total*1.0)
+            except ZeroDivisionError:
+                weightedScores[name]=score
             
         allscores = weightedScores.values()
         try:
@@ -202,11 +205,13 @@ class masterGradebook:
         self.master = {}
         self.Sessions=[]
         self.rows=[]
+        self.exclude=[]
 
-    def fillIn(self,cutoffRate=0.3,cutoffScore=0.2,forgetRatio=4,quorumRatio=0.5):
+    def fillIn(self,cutoffRate=0.3,cutoffScore=0.2,forgetRatio=4,quorumRatio=0.3):
         droppedSessions = [] #don't remove while iterating!!
         
         for sess in self.sessionlist:#go through session list
+            print "Processing {0}...".format(sess)
             ses = Session(sess,cutoffRate=cutoffRate,cutoffScore=cutoffScore,forgetRatio=forgetRatio,quorumRatio=quorumRatio)#makes an instance of Session
             results = ses.compileStats()#returns a dictionary with student scores
             if ses.hasQuorum:
@@ -218,11 +223,15 @@ class masterGradebook:
                         self.master[student][sessname]=score
                     except KeyError:#No dictionary created yet
                         self.master[student]={sessname:score}#initialize dictionary
+                print "Appending {0}".format(sess)        
                 self.Sessions.append(ses)
-            else: droppedSessions.append(sess)#didn't have quorum
+            else:
+                print "No quorum. Excluding {0}".format(sess)
+                self.exclude.append(sess)#didn't have quorum
 
-        self.sessionlist = [a for a in self.sessionlist if not(a in droppedSessions)]
-
+        for i in self.exclude:#This loop had to be added to avoid messing up stuff.
+            self.sessionlist.remove(i)
+            
         self.rows=[]#clear rows
         for s in self.master:
             en = self.master[s]
@@ -242,6 +251,7 @@ def masterGradebookBySection(sec):
     whose name contains sec as a subword"""
     allsessions = getTables(gradebook.gdbk)
     secsessions = [s for s in allsessions if sec in s]
+    print secsessions #debug
     m = masterGradebook(secsessions)
     m.fillIn()
     return m
