@@ -25,7 +25,6 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 
 ##Upcoming features:
 * Flexible flow enabling Mazur's Peer Instruction technique, e.g. the option to only show students the response rates (but not the correct answer) and the option to ask a question again without revealing the answer after student deliberation. (Note this can still be achieved by asking questions twice in a row, and there is an option to skip a question before showing it to students.)
-* Encryption, i.e. https.
 
 ##Required package:
 * `python2`
@@ -36,7 +35,9 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 ##How to get it running:
 Download the directory, ensure the required packages and python 2 module is installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges. **Due to web.py's limitations, this program will not work with more than 10 users. See Deployment below**
 
-Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `192.168.0.103:8080` into your browser url bar. To log in as an instructor use the username `prof`. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. By default the usernames are unset.
+There are two variables that need to be changed to ensure security the first one is the `salt` variable in `control.py`, the second one is the `adminPassword` in `webcrs.py`.
+
+Connect by pointing your browsers to the host's ip address (at the default port 8080) e.g. type something like `localhost:8080` into your browser url bar. To log in for the first time enter go to the backdoor url e.g. `localhost:8080/backdoor`, and log in as `admin` with the password you chose. There is already a section called `test1` with students `alice, bob, charlie, dylan, eve`. 
 
 Student and instructor rosters can be modified by uploading .csv files in the databases page.
 
@@ -87,4 +88,4 @@ url.rewrite-once = (
 ##Apologies
 I am an amateur programmer and started this project knowing only some python. I learned everything else as I was writing this program, consequently some bits may be a bit sloppy and some refactoring is definitely in order. To get rid of certain things like old gradebooks or student sections the databases may have to be edited directly.
 
-Updated: August 10 2016
+Updated: August 24 2017
