@@ -31,7 +31,7 @@ Clickers, which are physical devices, are a fashionnable classroom response tech
 * `python2`
 
 ##Required python module:
-* `web.py` (installable via python 2 `easy_install` or `pip install webpy`.)
+* `web.py` (installable via python 2 `easy_install` or `pip install web.py`.)
 
 ##How to get it running:
 Download the directory, ensure the required packages and python 2 module is installed, cd into the directory  and type: `python2 webcrs.py`. You can specify the port as follows `python2 webcrs.py 1234`. For special ports you need special privileges. **Due to web.py's limitations, this program will not work with more than 10 users. See Deployment below**
@@ -47,7 +47,7 @@ This webapp was successfully deployed on a [Linode](http://www.linode.com) runni
 
 1. Install the packages `git, python-pip, lighttpd`
 2. Clone this git repo
-3. `pip install webpy`
+3. `pip install web.py`
 4. `pip install flup`
 5. `chmod +x webcrs.py`
 5.  Use the following as `/etc/lighttpd/lighttpd.conf` (copy-pasted from [here](http://webpy.org/deployment) and assuming the repository is located at `/root/web-crs/`.
